@@ -1,0 +1,339 @@
+{
+  "id": "ch2",
+  "title": "Tautologies et équivalences",
+  "summary": "Formules toujours vraies, formules équivalentes, validité par les tables.",
+  "symbols": ["¬", "∧", "∨", "→", "↔", "(", ")"],
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Tautologie, contradiction, contingence",
+      "cours": [
+        {
+          "title": "Trois statuts",
+          "body": "- Une **tautologie** est vraie pour toutes les valuations : sa colonne ne contient que des V. Exemple : `p ∨ ¬p` (tiers exclu).\n- Une **contradiction** est fausse pour toutes les valuations. Exemple : `p ∧ ¬p`.\n- Une formule **contingente** est vraie pour certaines valuations et fausse pour d'autres. Exemple : `p → q`.\n\nUne formule est **satisfiable** si elle est vraie pour au moins une valuation : toutes sauf les contradictions."
+        },
+        {
+          "title": "Le test",
+          "body": "Pour classer une formule, on dresse sa table et on regarde la dernière colonne : que des V, que des F, ou un mélange.\n\nUne formule est une tautologie si et seulement si sa négation est une contradiction.",
+          "examples": [
+            { "formula": "p → (q → p)", "note": "Tautologie : pour la rendre fausse il faudrait p vraie et q → p fausse, donc p fausse. Impossible." }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c2-1",
+          "type": "mcq",
+          "prompt": "`p ∨ ¬p` est…",
+          "choices": ["une tautologie", "une contradiction", "contingente"],
+          "answer": 0,
+          "explanation": "C'est le principe du tiers exclu."
+        },
+        {
+          "id": "c2-2",
+          "type": "mcq",
+          "prompt": "`p ∧ ¬p` est…",
+          "choices": ["une contradiction", "une tautologie", "contingente"],
+          "answer": 0,
+          "explanation": "C'est le principe de non-contradiction : p et ¬p ne peuvent être vraies ensemble."
+        },
+        {
+          "id": "c2-3",
+          "type": "truthtable",
+          "prompt": "Complète la table pour savoir si `(p ∧ q) → p` est une tautologie.",
+          "formula": "(p ∧ q) → p",
+          "columns": ["p ∧ q", "(p ∧ q) → p"]
+        },
+        {
+          "id": "c2-4",
+          "type": "mcq",
+          "prompt": "`(p ∧ q) → p` est…",
+          "choices": ["une tautologie", "une contradiction", "contingente"],
+          "answer": 0
+        },
+        {
+          "id": "c2-5",
+          "type": "mcq",
+          "prompt": "`p → ¬p` est…",
+          "choices": ["contingente", "une contradiction", "une tautologie"],
+          "answer": 0,
+          "explanation": "Vraie quand p est fausse, fausse quand p est vraie."
+        },
+        {
+          "id": "c2-6",
+          "type": "mcq",
+          "prompt": "Si `A` est une tautologie, alors `¬A` est…",
+          "choices": ["une contradiction", "une tautologie", "contingente"],
+          "answer": 0
+        },
+        {
+          "id": "c2-7",
+          "type": "truthtable",
+          "formula": "(p → q) ∨ (q → p)",
+          "columns": ["p → q", "q → p", "(p → q) ∨ (q → p)"]
+        },
+        {
+          "id": "c2-8",
+          "type": "formula",
+          "prompt": "Écris une tautologie qui utilise la lettre `p` et le connecteur →.",
+          "answer": "p → p",
+          "require": ["→"],
+          "explanation": "p → p, ¬p → ¬p ou p → (p ∨ p) conviennent : toute tautologie est équivalente à toute autre."
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "De Morgan et double négation",
+      "cours": [
+        {
+          "title": "Équivalence logique",
+          "body": "Deux formules sont **équivalentes** (on note `A ≡ B`) si elles ont la même valeur pour toutes les valuations : leurs colonnes sont identiques.\n\nAutre manière de le dire : `A ≡ B` exactement quand `A ↔ B` est une tautologie."
+        },
+        {
+          "title": "Les lois de De Morgan",
+          "body": "- `¬(p ∧ q) ≡ ¬p ∨ ¬q` : « pas les deux » revient à « l'un des deux est faux ».\n- `¬(p ∨ q) ≡ ¬p ∧ ¬q` : « ni l'un ni l'autre ».\n\nLa négation traverse la parenthèse en changeant ∧ en ∨ et inversement.\n\n**Double négation** : `¬¬p ≡ p`.",
+          "examples": [
+            { "text": "« Il est faux que Jean et Marie soient venus » = « Jean n'est pas venu ou Marie n'est pas venue »." }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c2-9",
+          "type": "mcq",
+          "prompt": "Quelle formule est équivalente à `¬(p ∧ q)` ?",
+          "choices": ["¬p ∨ ¬q", "¬p ∧ ¬q", "¬p ∧ q", "p ∨ q"],
+          "formulas": true,
+          "answer": 0
+        },
+        {
+          "id": "c2-10",
+          "type": "formula",
+          "prompt": "Réécris `¬(p ∨ q)` sans ∨ et sans négation devant une parenthèse.",
+          "answer": "¬p ∧ ¬q",
+          "forbid": ["∨"],
+          "negationOnAtoms": true
+        },
+        {
+          "id": "c2-11",
+          "type": "formula",
+          "prompt": "Réécris `¬(p ∧ ¬q)` en n'utilisant ni ∧ ni →.",
+          "answer": "¬p ∨ q",
+          "forbid": ["∧", "→"],
+          "negationOnAtoms": true,
+          "explanation": "De Morgan donne ¬p ∨ ¬¬q, puis la double négation ¬p ∨ q."
+        },
+        {
+          "id": "c2-12",
+          "type": "mcq",
+          "prompt": "« Il est faux que Léa parle anglais ou allemand. » Cela signifie :",
+          "choices": ["Léa ne parle ni anglais ni allemand.", "Léa ne parle pas l'une des deux langues.", "Léa parle une seule des deux langues."],
+          "answer": 0
+        },
+        {
+          "id": "c2-13",
+          "type": "truthtable",
+          "prompt": "Vérifie De Morgan : remplis les deux colonnes et compare-les.",
+          "formula": "¬(p ∨ q)",
+          "columns": ["¬(p ∨ q)", "¬p ∧ ¬q"]
+        },
+        {
+          "id": "c2-14",
+          "type": "formula",
+          "prompt": "Simplifie `¬¬(p ∧ ¬¬q)` : écris une formule équivalente sans aucune négation.",
+          "answer": "p ∧ q",
+          "forbid": ["¬"]
+        },
+        {
+          "id": "c2-15",
+          "type": "mcq",
+          "prompt": "Quelle formule n'est **pas** équivalente à `¬(¬p ∨ q)` ?",
+          "choices": ["¬p ∧ ¬q", "p ∧ ¬q", "¬(p → q)"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "¬(¬p ∨ q) ≡ ¬¬p ∧ ¬q ≡ p ∧ ¬q, qui est aussi ¬(p → q)."
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Implication, contraposée, distributivité",
+      "cours": [
+        {
+          "title": "Réécrire l'implication",
+          "body": "- `p → q ≡ ¬p ∨ q` : « si p alors q » revient à « non p, ou q ».\n- `¬(p → q) ≡ p ∧ ¬q` : une implication est fausse quand l'antécédent est vrai et le conséquent faux.\n- **Contraposée** : `p → q ≡ ¬q → ¬p`.\n\nAttention : la **réciproque** `q → p` et la **contraire** `¬p → ¬q` ne sont **pas** équivalentes à `p → q`.",
+          "examples": [
+            { "text": "« S'il pleut, la route est mouillée » ≡ « si la route n'est pas mouillée, il ne pleut pas »." }
+          ]
+        },
+        {
+          "title": "Distributivité et biconditionnel",
+          "body": "- `p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r)`\n- `p ∨ (q ∧ r) ≡ (p ∨ q) ∧ (p ∨ r)`\n- `p ↔ q ≡ (p → q) ∧ (q → p)`\n- **Exportation** : `(p ∧ q) → r ≡ p → (q → r)`"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c2-16",
+          "type": "mcq",
+          "prompt": "Quelle est la contraposée de `p → q` ?",
+          "choices": ["¬q → ¬p", "q → p", "¬p → ¬q", "¬p → q"],
+          "formulas": true,
+          "answer": 0
+        },
+        {
+          "id": "c2-17",
+          "type": "mcq",
+          "prompt": "« S'il est cuisinier, il sait faire une omelette. » Laquelle de ces phrases dit la même chose ?",
+          "choices": ["S'il ne sait pas faire d'omelette, il n'est pas cuisinier.", "S'il sait faire une omelette, il est cuisinier.", "S'il n'est pas cuisinier, il ne sait pas faire d'omelette."],
+          "answer": 0,
+          "explanation": "C'est la contraposée. Les deux autres sont la réciproque et la contraire."
+        },
+        {
+          "id": "c2-18",
+          "type": "formula",
+          "prompt": "Réécris `p → q` avec seulement ¬ et ∨.",
+          "answer": "¬p ∨ q",
+          "forbid": ["→", "∧", "↔"]
+        },
+        {
+          "id": "c2-19",
+          "type": "formula",
+          "prompt": "Écris la négation de `p → q` sans utiliser →.",
+          "answer": "p ∧ ¬q",
+          "forbid": ["→", "↔"]
+        },
+        {
+          "id": "c2-20",
+          "type": "formula",
+          "prompt": "Développe `p ∧ (q ∨ r)` en une disjonction de conjonctions.",
+          "answer": "(p ∧ q) ∨ (p ∧ r)"
+        },
+        {
+          "id": "c2-21",
+          "type": "formula",
+          "prompt": "Écris une formule équivalente à `p ↔ q` sans utiliser ↔.",
+          "answer": "(p → q) ∧ (q → p)",
+          "forbid": ["↔"]
+        },
+        {
+          "id": "c2-22",
+          "type": "mcq",
+          "prompt": "`(p ∧ q) → r` est équivalente à…",
+          "choices": ["p → (q → r)", "(p → q) → r", "p ∧ (q → r)"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "C'est la loi d'exportation."
+        },
+        {
+          "id": "c2-23",
+          "type": "formula",
+          "prompt": "Écris `p ∨ q` en utilisant seulement ¬ et →.",
+          "answer": "¬p → q",
+          "forbid": ["∨", "∧", "↔"],
+          "explanation": "« p ou q » revient à « si non p, alors q »."
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "Validité par les tables",
+      "cours": [
+        {
+          "title": "Tester un argument",
+          "body": "Un argument est **valide** si aucune valuation ne rend toutes les prémisses vraies et la conclusion fausse.\n\nUne valuation qui le fait est un **contre-exemple** : elle prouve que l'argument est invalide. Pour le trouver, cherche dans la table une ligne où les prémisses sont V et la conclusion F.",
+          "examples": [
+            { "text": "p → q, q ∴ p", "note": "Invalide : avec p = F et q = V, les prémisses sont vraies et la conclusion fausse." }
+          ]
+        },
+        {
+          "title": "Formes à connaître",
+          "body": "Valides :\n- *modus ponens* : `p → q`, `p` ∴ `q`\n- *modus tollens* : `p → q`, `¬q` ∴ `¬p`\n- *syllogisme disjonctif* : `p ∨ q`, `¬p` ∴ `q`\n- *syllogisme hypothétique* : `p → q`, `q → r` ∴ `p → r`\n\nInvalides (sophismes) :\n- affirmation du conséquent : `p → q`, `q` ∴ `p`\n- négation de l'antécédent : `p → q`, `¬p` ∴ `¬q`"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c2-24",
+          "type": "valuation",
+          "premises": ["p → q", "q"],
+          "conclusion": "p",
+          "explanation": "C'est l'affirmation du conséquent : p = F, q = V est un contre-exemple."
+        },
+        {
+          "id": "c2-25",
+          "type": "valuation",
+          "premises": ["p → q", "¬p"],
+          "conclusion": "¬q",
+          "explanation": "C'est la négation de l'antécédent : p = F, q = V est un contre-exemple."
+        },
+        {
+          "id": "c2-26",
+          "type": "valuation",
+          "prompt": "Trouve un contre-exemple, ou indique que l'argument est valide.",
+          "premises": ["p → q", "¬q"],
+          "conclusion": "¬p",
+          "explanation": "C'est le modus tollens : il est valide."
+        },
+        {
+          "id": "c2-27",
+          "type": "mcq",
+          "prompt": "« Si le chien aboie, il y a quelqu'un. Il n'y a personne. Donc le chien n'aboie pas. » Quelle forme ?",
+          "choices": ["Modus tollens (valide)", "Modus ponens (valide)", "Négation de l'antécédent (invalide)"],
+          "answer": 0
+        },
+        {
+          "id": "c2-28",
+          "type": "valuation",
+          "prompt": "Trouve un contre-exemple, ou indique que l'argument est valide.",
+          "premises": ["p ∨ q", "p"],
+          "conclusion": "¬q",
+          "explanation": "Le ∨ est inclusif : p et q peuvent être vraies ensemble."
+        },
+        {
+          "id": "c2-29",
+          "type": "valuation",
+          "prompt": "Trouve un contre-exemple, ou indique que l'argument est valide.",
+          "premises": ["p → q", "q → r"],
+          "conclusion": "p → r",
+          "explanation": "C'est le syllogisme hypothétique : valide."
+        },
+        {
+          "id": "c2-30",
+          "type": "valuation",
+          "prompt": "Trouve un contre-exemple, ou indique que l'argument est valide.",
+          "premises": ["p → (q ∨ r)", "¬q"],
+          "conclusion": "¬p",
+          "explanation": "Avec p = V, q = F, r = V, les prémisses sont vraies et la conclusion fausse."
+        },
+        {
+          "id": "c2-31",
+          "type": "mcq",
+          "prompt": "« Soit il est à la maison, soit il est au bureau. Il n'est pas au bureau. Donc il est à la maison. » Cet argument est…",
+          "choices": ["valide (syllogisme disjonctif)", "invalide"],
+          "answer": 0
+        }
+      ]
+    }
+  ],
+  "test": {
+    "size": 10,
+    "exercises": [
+      {
+        "id": "c2-t1",
+        "type": "formula",
+        "prompt": "Écris la négation de `p ∧ (q → r)` sans négation devant une parenthèse, et sans utiliser →.",
+        "answer": "¬p ∨ (q ∧ ¬r)",
+        "forbid": ["→", "↔"],
+        "negationOnAtoms": true
+      },
+      {
+        "id": "c2-t2",
+        "type": "valuation",
+        "prompt": "Trouve un contre-exemple, ou indique que l'argument est valide.",
+        "premises": ["(p ∧ q) → r", "¬r"],
+        "conclusion": "¬p",
+        "explanation": "Avec p = V, q = F, r = F : prémisses vraies, conclusion fausse."
+      }
+    ]
+  }
+}

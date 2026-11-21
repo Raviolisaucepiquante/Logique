@@ -1,0 +1,301 @@
+{
+  "id": "ch7",
+  "title": "Bonus : logique classique",
+  "summary": "Syllogistique d'Aristote, carré des oppositions, de re et de dicto.",
+  "symbols": ["¬", "∧", "∨", "→", "↔", "∀", "∃", "□", "◇", "(", ")", "x", "y"],
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Les quatre propositions",
+      "cours": [
+        {
+          "title": "A, E, I, O",
+          "body": "La logique d'Aristote, reprise par les scolastiques, étudie les propositions **catégoriques** : un sujet S, un prédicat P, une **quantité** (universelle ou particulière) et une **qualité** (affirmative ou négative).\n\n- **A** : « Tout S est P » (universelle affirmative)\n- **E** : « Aucun S n'est P » (universelle négative)\n- **I** : « Quelque S est P » (particulière affirmative)\n- **O** : « Quelque S n'est pas P » (particulière négative)\n\nMoyen mnémotechnique médiéval : *AffIrmo*, *nEgO*. A et I affirment, E et O nient."
+        },
+        {
+          "title": "Traduction moderne",
+          "body": "- A : `∀x(Sx → Px)`\n- E : `∀x(Sx → ¬Px)`\n- I : `∃x(Sx ∧ Px)`\n- O : `∃x(Sx ∧ ¬Px)`\n\nUne différence importante : pour Aristote, « Tout S est P » suppose qu'il existe des S. La traduction moderne ne le suppose pas : si aucun S n'existe, `∀x(Sx → Px)` est vraie. On y reviendra avec le carré."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c7-1",
+          "type": "mcq",
+          "prompt": "« Quelque homme n'est pas juste. » De quel type est cette proposition ?",
+          "choices": ["O", "I", "E", "A"],
+          "answer": 0,
+          "explanation": "Particulière (quelque) et négative (n'est pas) : O."
+        },
+        {
+          "id": "c7-2",
+          "type": "mcq",
+          "prompt": "« Aucun ange n'est corporel. » De quel type est cette proposition ?",
+          "choices": ["E", "O", "A", "I"],
+          "answer": 0
+        },
+        {
+          "id": "c7-3",
+          "type": "formalize",
+          "sentence": "Tout animal est mortel.",
+          "legend": { "Ax": "x est un animal", "Mx": "x est mortel" },
+          "answer": "∀x(Ax → Mx)"
+        },
+        {
+          "id": "c7-4",
+          "type": "formalize",
+          "sentence": "Quelque philosophe n'est pas sage.",
+          "legend": { "Px": "x est un philosophe", "Wx": "x est sage" },
+          "answer": "∃x(Px ∧ ¬Wx)"
+        },
+        {
+          "id": "c7-5",
+          "type": "formalize",
+          "sentence": "Aucun cercle n'est carré.",
+          "legend": { "Cx": "x est un cercle", "Kx": "x est carré" },
+          "answer": "∀x(Cx → ¬Kx)"
+        },
+        {
+          "id": "c7-6",
+          "type": "mcq",
+          "prompt": "Que désigne la **qualité** d'une proposition catégorique ?",
+          "choices": ["Le fait qu'elle soit affirmative ou négative", "Le fait qu'elle soit universelle ou particulière", "Sa vérité"],
+          "answer": 0
+        },
+        {
+          "id": "c7-7",
+          "type": "mcq",
+          "prompt": "Quelle formule traduit une proposition de type I ?",
+          "choices": ["∃x(Sx ∧ Px)", "∃x(Sx → Px)", "∀x(Sx ∧ Px)"],
+          "formulas": true,
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Le carré des oppositions",
+      "cours": [
+        {
+          "title": "Quatre relations",
+          "body": "Disposées aux coins d'un carré (A et E en haut, I et O en bas), les quatre propositions entretiennent des relations fixes :\n- **contradictoires** (diagonales A–O et E–I) : l'une est vraie, l'autre fausse, toujours ;\n- **contraires** (A–E) : elles ne peuvent pas être vraies ensemble, mais peuvent être fausses ensemble ;\n- **subcontraires** (I–O) : elles ne peuvent pas être fausses ensemble ;\n- **subalternes** (A→I, E→O) : si l'universelle est vraie, la particulière l'est aussi."
+        },
+        {
+          "title": "Le carré et la logique moderne",
+          "body": "Les contradictions (A–O, E–I) restent valides en logique moderne : `∃x(Sx ∧ ¬Px)` est équivalent à `¬∀x(Sx → Px)`.\n\nMais les autres relations supposent qu'il existe des S (**portée existentielle**). Si aucun S n'existe, A et E sont toutes deux vraies, I et O toutes deux fausses : la subalternation et la contrariété échouent.\n\nAristote et les médiévaux raisonnaient sur des termes non vides ; la logique moderne ne fait pas cette hypothèse."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c7-8",
+          "type": "mcq",
+          "prompt": "Quelle est la contradictoire de « Tout homme est juste » ?",
+          "choices": ["Quelque homme n'est pas juste.", "Aucun homme n'est juste.", "Quelque homme est juste."],
+          "answer": 0,
+          "explanation": "A et O sont contradictoires. « Aucun homme n'est juste » est la contraire : les deux peuvent être fausses."
+        },
+        {
+          "id": "c7-9",
+          "type": "mcq",
+          "prompt": "Si « Aucun S n'est P » (E) est vraie, que vaut « Quelque S est P » (I) ?",
+          "choices": ["Fausse", "Vraie", "On ne peut pas savoir"],
+          "answer": 0,
+          "explanation": "E et I sont contradictoires."
+        },
+        {
+          "id": "c7-10",
+          "type": "mcq",
+          "prompt": "Deux propositions qui ne peuvent pas être fausses ensemble, mais peuvent être vraies ensemble, sont…",
+          "choices": ["subcontraires (I et O)", "contraires (A et E)", "contradictoires"],
+          "answer": 0
+        },
+        {
+          "id": "c7-11",
+          "type": "buildmodel",
+          "prompt": "Portée existentielle : construis un modèle où « Tout S est P » est vraie mais « Quelque S est P » est fausse.",
+          "true": ["∀x(Sx → Px)"],
+          "false": ["∃x(Sx ∧ Px)"],
+          "explanation": "Il suffit qu'aucun objet ne soit S : l'universelle est vraie à vide, la particulière fausse."
+        },
+        {
+          "id": "c7-12",
+          "type": "formula",
+          "prompt": "Écris la contradictoire de `∀x(Sx → Px)` sans mettre ¬ devant le quantificateur.",
+          "answer": "∃x(Sx ∧ ¬Px)",
+          "negationOnAtoms": true
+        },
+        {
+          "id": "c7-13",
+          "type": "mcq",
+          "prompt": "Si « Tout S est P » est fausse, que vaut « Aucun S n'est P » ?",
+          "choices": ["On ne peut pas savoir", "Vraie", "Fausse"],
+          "answer": 0,
+          "explanation": "Les contraires peuvent être fausses ensemble : « tout homme est juste » et « aucun homme n'est juste » sont toutes deux fausses."
+        },
+        {
+          "id": "c7-14",
+          "type": "buildmodel",
+          "prompt": "Montre que A et E peuvent être vraies ensemble quand le sujet est vide.",
+          "true": ["∀x(Sx → Px)", "∀x(Sx → ¬Px)"],
+          "false": [],
+          "maxSize": 2
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Syllogismes",
+      "cours": [
+        {
+          "title": "Structure d'un syllogisme",
+          "body": "Un **syllogisme** a deux prémisses et une conclusion, toutes catégoriques, avec trois termes :\n- le **grand terme** (prédicat de la conclusion), présent dans la majeure ;\n- le **petit terme** (sujet de la conclusion), présent dans la mineure ;\n- le **moyen terme**, présent dans les deux prémisses mais pas dans la conclusion.\n\nLes modes valides portent des noms médiévaux dont les voyelles donnent les types : **Barbara** (A, A, A), **Celarent** (E, A, E), **Darii** (A, I, I), **Ferio** (E, I, O).",
+          "examples": [
+            { "text": "Tout homme est mortel ; tout Grec est homme ; donc tout Grec est mortel.", "note": "Barbara : moyen terme « homme »." },
+            { "text": "Aucun reptile n'a de poils ; tout serpent est un reptile ; donc aucun serpent n'a de poils.", "note": "Celarent." }
+          ]
+        },
+        {
+          "title": "Repérer un syllogisme invalide",
+          "body": "Quelques règles classiques :\n- le moyen terme doit être pris **universellement** au moins une fois (sinon : *moyen non distribué*) ;\n- de deux prémisses négatives, rien ne suit ;\n- de deux particulières, rien ne suit.\n\nLa méthode moderne est plus sûre : traduire, puis chercher un contre-modèle ou une preuve."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c7-15",
+          "type": "mcq",
+          "prompt": "« Aucun M n'est P ; quelque S est M ; donc quelque S n'est pas P. » Quel mode ?",
+          "choices": ["Ferio", "Darii", "Celarent", "Barbara"],
+          "answer": 0,
+          "explanation": "E, I, O : Ferio."
+        },
+        {
+          "id": "c7-16",
+          "type": "buildmodel",
+          "prompt": "« Tout chien est mammifère ; tout chat est mammifère ; donc tout chien est chat. » Moyen non distribué : construis un contre-modèle (D : chien, M : mammifère, C : chat).",
+          "true": ["∀x(Dx → Mx)", "∀x(Cx → Mx)"],
+          "false": ["∀x(Dx → Cx)"]
+        },
+        {
+          "id": "c7-17",
+          "type": "proof",
+          "prompt": "Démontre **Celarent** :",
+          "premises": ["∀x(Mx → ¬Px)", "∀x(Sx → Mx)"],
+          "conclusion": "∀x(Sx → ¬Px)",
+          "solution": [
+            { "d": 0, "f": "Ma → ¬Pa", "r": "∀E", "c": "1" },
+            { "d": 0, "f": "Sa → Ma", "r": "∀E", "c": "2" },
+            { "d": 1, "f": "Sa", "r": "Hyp" },
+            { "d": 1, "f": "Ma", "r": "→E", "c": "4, 5" },
+            { "d": 1, "f": "¬Pa", "r": "→E", "c": "3, 6" },
+            { "d": 0, "f": "Sa → ¬Pa", "r": "→I", "c": "5-7" },
+            { "d": 0, "f": "∀x(Sx → ¬Px)", "r": "∀I", "c": "8" }
+          ]
+        },
+        {
+          "id": "c7-18",
+          "type": "mcq",
+          "prompt": "Dans « Tout homme est mortel ; Socrate est un homme ; donc Socrate est mortel », quel est le moyen terme ?",
+          "choices": ["homme", "mortel", "Socrate"],
+          "answer": 0
+        },
+        {
+          "id": "c7-19",
+          "type": "buildmodel",
+          "prompt": "« Tout M est P ; aucun S n'est M ; donc aucun S n'est P. » Construis un contre-modèle.",
+          "true": ["∀x(Mx → Px)", "∀x(Sx → ¬Mx)"],
+          "false": ["∀x(Sx → ¬Px)"],
+          "explanation": "C'est l'« illicite majeur » : P est pris universellement dans la conclusion sans l'être dans la majeure."
+        },
+        {
+          "id": "c7-20",
+          "type": "proof",
+          "prompt": "Démontre **Darii** :",
+          "premises": ["∀x(Mx → Px)", "∃x(Sx ∧ Mx)"],
+          "conclusion": "∃x(Sx ∧ Px)",
+          "solution": [
+            { "d": 1, "f": "Sa ∧ Ma", "r": "Hyp" },
+            { "d": 1, "f": "Sa", "r": "∧E", "c": "3" },
+            { "d": 1, "f": "Ma", "r": "∧E", "c": "3" },
+            { "d": 1, "f": "Ma → Pa", "r": "∀E", "c": "1" },
+            { "d": 1, "f": "Pa", "r": "→E", "c": "6, 5" },
+            { "d": 1, "f": "Sa ∧ Pa", "r": "∧I", "c": "4, 7" },
+            { "d": 1, "f": "∃x(Sx ∧ Px)", "r": "∃I", "c": "8" },
+            { "d": 0, "f": "∃x(Sx ∧ Px)", "r": "∃E", "c": "2, 3-9" }
+          ]
+        },
+        {
+          "id": "c7-21",
+          "type": "mcq",
+          "prompt": "« Quelques S sont M ; quelques M sont P ; donc quelques S sont P. » Cet argument est…",
+          "choices": ["invalide : de deux particulières, rien ne suit", "valide (Darii)", "valide (Barbara)"],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "De re et de dicto",
+      "cours": [
+        {
+          "title": "Deux lectures de la nécessité",
+          "body": "« Le nombre des planètes est nécessairement supérieur à 7. » Deux lectures :\n- **de dicto** (sur ce qui est dit) : la proposition « le nombre des planètes est supérieur à 7 » est nécessaire. C'est faux : il aurait pu y avoir 5 planètes.\n- **de re** (sur la chose) : le nombre qui est en fait celui des planètes, 8, est nécessairement supérieur à 7. C'est vrai.\n\nAvec les quantificateurs, la différence tient à la **portée** de □ :\n- de dicto : `□∃x Fx`, la modalité porte sur tout l'énoncé ;\n- de re : `∃x□Fx`, la modalité porte sur une propriété d'un objet."
+        },
+        {
+          "title": "Exemples classiques",
+          "body": "- « Quelqu'un doit gagner la course » : de dicto, `□∃x Gx` (il est nécessaire qu'il y ait un gagnant), plausible ; de re, `∃x□Gx` (une personne précise gagnera nécessairement), bien plus fort.\n- « Ce qui est su est nécessairement vrai » : de dicto, `□(s → v)`, juste ; de re, `s → □v`, cela ferait de toute vérité connue une vérité nécessaire.\n\nLes scolastiques parlaient de *sensus compositus* (de dicto) et *sensus divisus* (de re), à propos par exemple de la prescience divine et de la liberté."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c7-22",
+          "type": "mcq",
+          "prompt": "« Quelqu'un doit gagner » au sens où il est nécessaire qu'il y ait un gagnant. Quelle formule ?",
+          "choices": ["□∃xGx", "∃x□Gx", "∃xGx"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "C'est la lecture de dicto : la modalité porte sur tout l'énoncé."
+        },
+        {
+          "id": "c7-23",
+          "type": "mcq",
+          "prompt": "Quelle lecture exprime `∃x□Fx` ?",
+          "choices": ["De re : un objet a nécessairement la propriété F", "De dicto : il est nécessaire que quelque chose soit F", "Aucune des deux"],
+          "answer": 0
+        },
+        {
+          "id": "c7-24",
+          "type": "mcq",
+          "prompt": "« Le nombre des planètes est nécessairement supérieur à 7 » est vrai…",
+          "choices": ["seulement de re", "seulement de dicto", "dans les deux lectures"],
+          "answer": 0,
+          "explanation": "Le nombre 8 est nécessairement supérieur à 7 (de re) ; mais qu'il y ait plus de 7 planètes n'est pas nécessaire (de dicto)."
+        },
+        {
+          "id": "c7-25",
+          "type": "mcq",
+          "prompt": "« Si Dieu sait que je ferai x, nécessairement je ferai x. » Quelle lecture rend la phrase compatible avec la liberté ?",
+          "choices": ["□(s → f) : la conséquence est nécessaire (sensus compositus)", "s → □f : l'acte est nécessaire (sensus divisus)", "Aucune"],
+          "formulas": false,
+          "answer": 0,
+          "explanation": "Thomas d'Aquin et Boèce : nécessité de la conséquence, non du conséquent. Si Dieu sait que je ferai x, il ne peut pas se tromper, mais l'acte reste contingent."
+        },
+        {
+          "id": "c7-26",
+          "type": "mcq",
+          "prompt": "Le *sensus divisus* des scolastiques correspond à la lecture…",
+          "choices": ["de re", "de dicto"],
+          "answer": 0
+        },
+        {
+          "id": "c7-27",
+          "type": "mcq",
+          "prompt": "Laquelle de ces formules dit que tout objet est nécessairement F (de re) ?",
+          "choices": ["∀x□Fx", "□∀xFx", "◇∀xFx"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "□∀xFx est la lecture de dicto. Leur équivalence dépend de la formule de Barcan, débattue en métaphysique modale."
+        }
+      ]
+    }
+  ],
+  "test": { "size": 10 }
+}

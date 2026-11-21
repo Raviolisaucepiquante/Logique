@@ -1,0 +1,345 @@
+{
+  "id": "ch5",
+  "title": "Modèles et preuves",
+  "summary": "Vérité dans un modèle, contre-modèles, règles de déduction pour ∀ et ∃.",
+  "symbols": ["¬", "∧", "∨", "→", "↔", "∀", "∃", "⊥", "(", ")", "x", "y"],
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Qu'est-ce qu'un modèle ?",
+      "cours": [
+        {
+          "title": "Interpréter les symboles",
+          "body": "En logique propositionnelle, une valuation suffit : chaque lettre est V ou F. En logique des prédicats, il faut un **modèle**, qui fixe :\n- un **domaine** : l'ensemble des objets dont on parle (non vide) ;\n- pour chaque **nom**, l'objet qu'il désigne ;\n- pour chaque **prédicat**, son **extension** : l'ensemble des objets (ou des paires, pour une relation) dont il est vrai.",
+          "examples": [
+            { "text": "Domaine {1, 2, 3} ; a désigne 1 ; F = {1, 2} ; R = {⟨1,2⟩, ⟨2,3⟩}", "note": "Fa est vrai (1 est dans F) ; Rab est vrai si b désigne 2." }
+          ]
+        },
+        {
+          "title": "Vérité des énoncés quantifiés",
+          "body": "- `∀x Fx` est vrai si **chaque** objet du domaine est dans l'extension de F.\n- `∃x Fx` est vrai si **au moins un** objet y est.\n- `∀x(Fx → Gx)` est vrai si tout objet de F est aussi dans G.\n\nUn même énoncé peut être vrai dans un modèle et faux dans un autre : il ne s'agit plus de « tables » mais de « mondes miniatures »."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c5-1",
+          "type": "modeltruth",
+          "model": { "domain": ["1", "2", "3"], "constants": { "a": "1", "b": "3" }, "predicates": { "F": ["1", "2"], "G": ["2"] } },
+          "sentences": ["Fa", "Fb", "∃x Gx", "∀x Fx"]
+        },
+        {
+          "id": "c5-2",
+          "type": "modeltruth",
+          "model": { "domain": ["1", "2", "3"], "constants": { "a": "1" }, "predicates": { "F": ["1", "2"], "G": ["2"] } },
+          "sentences": ["∀x(Gx → Fx)", "∀x(Fx → Gx)", "∃x(Fx ∧ ¬Gx)", "¬∃x(Gx ∧ ¬Fx)"]
+        },
+        {
+          "id": "c5-3",
+          "type": "mcq",
+          "prompt": "Domaine {1, 2}, F = {} (vide). Que vaut `∀x(Fx → Gx)` ?",
+          "choices": ["Vrai", "Faux"],
+          "answer": 0,
+          "explanation": "Aucun objet n'est F : l'implication Fx → Gx est vraie pour chaque objet. Un universel « vide » est vrai."
+        },
+        {
+          "id": "c5-4",
+          "type": "modeltruth",
+          "model": { "domain": ["1", "2", "3"], "constants": { "a": "1" }, "predicates": { "R": [["1", "2"], ["2", "3"], ["3", "3"]] } },
+          "sentences": ["∃x Rax", "∃x Rxa", "∀x∃y Rxy", "∃y∀x Rxy"]
+        },
+        {
+          "id": "c5-5",
+          "type": "mcq",
+          "prompt": "Que faut-il pour que `∃x Fx` soit vrai dans un modèle ?",
+          "choices": ["Qu'au moins un objet du domaine soit dans l'extension de F", "Que tous les objets soient dans F", "Qu'un nom désigne un objet de F"],
+          "answer": 0
+        },
+        {
+          "id": "c5-6",
+          "type": "modeltruth",
+          "model": { "domain": ["Socrate", "Platon", "Médor"], "constants": { "s": "Socrate", "m": "Médor" }, "predicates": { "H": ["Socrate", "Platon"], "M": ["Socrate", "Platon", "Médor"], "P": ["Socrate", "Platon"] } },
+          "sentences": ["∀x(Hx → Mx)", "∀x(Mx → Hx)", "∃x(Hx ∧ Px)", "Pm ∨ Hs"]
+        },
+        {
+          "id": "c5-7",
+          "type": "mcq",
+          "prompt": "Un énoncé vrai dans **tous** les modèles est dit…",
+          "choices": ["logiquement vrai (valide)", "satisfiable", "contingent"],
+          "answer": 0,
+          "explanation": "C'est l'équivalent, en logique des prédicats, d'une tautologie."
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Contre-modèles",
+      "cours": [
+        {
+          "title": "Montrer qu'un argument est invalide",
+          "body": "Un argument est **valide** si sa conclusion est vraie dans tout modèle où ses prémisses sont vraies.\n\nPour montrer qu'il est **invalide**, il suffit d'un **contre-modèle** : un modèle où les prémisses sont vraies et la conclusion fausse. C'est la version « prédicats » du contre-exemple.",
+          "examples": [
+            { "text": "Quelque chose est F, quelque chose est G ; donc quelque chose est F et G.", "note": "Invalide : domaine {1, 2}, F = {1}, G = {2}." }
+          ]
+        },
+        {
+          "title": "Méthode",
+          "body": "- Commence par le plus petit domaine possible (1 ou 2 objets).\n- Rends la conclusion fausse : un ∀ faux demande un objet qui fait exception ; un ∃ faux demande qu'aucun objet ne convienne.\n- Ajuste ensuite les extensions pour rendre chaque prémisse vraie.\n\nDans l'exercice, chaque énoncé affiche en direct s'il a la valeur demandée."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c5-8",
+          "type": "buildmodel",
+          "prompt": "Montre que l'argument « ∃x Fx, ∃x Gx, donc ∃x(Fx ∧ Gx) » est invalide.",
+          "true": ["∃x Fx", "∃x Gx"],
+          "false": ["∃x(Fx ∧ Gx)"]
+        },
+        {
+          "id": "c5-9",
+          "type": "buildmodel",
+          "prompt": "Montre que de « quelque chose est F » on ne peut pas conclure « tout est F ».",
+          "true": ["∃x Fx"],
+          "false": ["∀x Fx"]
+        },
+        {
+          "id": "c5-10",
+          "type": "buildmodel",
+          "prompt": "« Tous les F sont G ; b est G ; donc b est F. » Construis un contre-modèle.",
+          "true": ["∀x(Fx → Gx)", "Gb"],
+          "false": ["Fb"],
+          "explanation": "C'est l'affirmation du conséquent, version prédicats."
+        },
+        {
+          "id": "c5-11",
+          "type": "mcq",
+          "prompt": "Qu'est-ce qu'un contre-modèle d'un argument ?",
+          "choices": ["Un modèle où les prémisses sont vraies et la conclusion fausse", "Un modèle où tout est faux", "Un modèle où la conclusion est vraie"],
+          "answer": 0
+        },
+        {
+          "id": "c5-12",
+          "type": "buildmodel",
+          "prompt": "Montre que « ∀x(Fx ∨ Gx) » n'implique pas « ∀x Fx ∨ ∀x Gx ».",
+          "true": ["∀x(Fx ∨ Gx)"],
+          "false": ["∀x Fx ∨ ∀x Gx"]
+        },
+        {
+          "id": "c5-13",
+          "type": "buildmodel",
+          "prompt": "Montre que « tout le monde aime quelqu'un » n'implique pas « quelqu'un est aimé de tous ».",
+          "true": ["∀x∃y Rxy"],
+          "false": ["∃y∀x Rxy"],
+          "explanation": "Avec deux objets qui s'aiment chacun eux-mêmes seulement, par exemple."
+        },
+        {
+          "id": "c5-14",
+          "type": "mcq",
+          "prompt": "« Tous les F sont G ; a est F ; donc a est G. » Peut-on trouver un contre-modèle ?",
+          "choices": ["Non : l'argument est valide", "Oui, avec un domaine de deux objets", "Oui, si G est vide"],
+          "answer": 0,
+          "explanation": "Si a est dans F et que F est inclus dans G, a est dans G : pas de contre-modèle possible."
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Preuves : ∀E et ∃I",
+      "cours": [
+        {
+          "title": "Élimination de ∀",
+          "body": "**∀E** : de `∀x A`, on peut écrire `A` où chaque occurrence libre de `x` est remplacée par **un même nom**, n'importe lequel. Ce qui vaut de tout vaut de chacun.",
+          "examples": [
+            {
+              "text": "∀x(Hx → Mx), Hs ⊢ Ms",
+              "proof": { "premises": ["∀x(Hx → Mx)", "Hs"], "lines": [{ "d": 0, "f": "Hs → Ms", "r": "∀E", "c": "1" }, { "d": 0, "f": "Ms", "r": "→E", "c": "3, 2" }] }
+            }
+          ]
+        },
+        {
+          "title": "Introduction de ∃",
+          "body": "**∃I** : d'un énoncé contenant un nom, par exemple `Fa`, on peut écrire `∃x Fx`. Si a est F, quelque chose est F.\n\nOn peut ne remplacer qu'**une partie** des occurrences du nom : de `Raa`, on peut tirer `∃x Rxa` aussi bien que `∃x Rxx`."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c5-15",
+          "type": "proof",
+          "premises": ["∀x(Hx → Mx)", "Hs"],
+          "conclusion": "Ms",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∀E", "∃I"],
+          "solution": [{ "d": 0, "f": "Hs → Ms", "r": "∀E", "c": "1" }, { "d": 0, "f": "Ms", "r": "→E", "c": "3, 2" }],
+          "explanation": "Le syllogisme de Socrate, enfin démontré !"
+        },
+        {
+          "id": "c5-16",
+          "type": "proof",
+          "premises": ["Fa"],
+          "conclusion": "∃x Fx",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∀E", "∃I"],
+          "solution": [{ "d": 0, "f": "∃x Fx", "r": "∃I", "c": "1" }]
+        },
+        {
+          "id": "c5-17",
+          "type": "mcq",
+          "prompt": "De `∀x Rxx`, que peut-on écrire par ∀E ?",
+          "choices": ["Rbb", "Rab", "Rxb"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "Toutes les occurrences de x sont remplacées par le même nom."
+        },
+        {
+          "id": "c5-18",
+          "type": "proof",
+          "premises": ["∀x Fx"],
+          "conclusion": "∃x Fx",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∀E", "∃I"],
+          "solution": [{ "d": 0, "f": "Fa", "r": "∀E", "c": "1" }, { "d": 0, "f": "∃x Fx", "r": "∃I", "c": "2" }],
+          "explanation": "Le domaine n'est jamais vide : si tout est F, quelque chose est F."
+        },
+        {
+          "id": "c5-19",
+          "type": "proof",
+          "justifyOnly": true,
+          "premises": ["∀x(Fx → Gx)", "Fa"],
+          "conclusion": "∃x Gx",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∀E", "∃I"],
+          "given": [{ "d": 0, "f": "Fa → Ga" }, { "d": 0, "f": "Ga" }, { "d": 0, "f": "∃x Gx" }],
+          "solution": [{ "d": 0, "f": "Fa → Ga", "r": "∀E", "c": "1" }, { "d": 0, "f": "Ga", "r": "→E", "c": "3, 2" }, { "d": 0, "f": "∃x Gx", "r": "∃I", "c": "4" }]
+        },
+        {
+          "id": "c5-20",
+          "type": "proof",
+          "premises": ["∀x(Fx ∧ Gx)"],
+          "conclusion": "Gb",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∀E", "∃I"],
+          "solution": [{ "d": 0, "f": "Fb ∧ Gb", "r": "∀E", "c": "1" }, { "d": 0, "f": "Gb", "r": "∧E", "c": "2" }]
+        },
+        {
+          "id": "c5-21",
+          "type": "proof",
+          "premises": ["∀x Rxx"],
+          "conclusion": "∃x Rxa",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∀E", "∃I"],
+          "solution": [{ "d": 0, "f": "Raa", "r": "∀E", "c": "1" }, { "d": 0, "f": "∃x Rxa", "r": "∃I", "c": "2" }],
+          "explanation": "∃I ne remplace ici que la première occurrence de a."
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "Preuves : ∀I, ∃E et conversion",
+      "cours": [
+        {
+          "title": "Introduction de ∀",
+          "body": "**∀I** : de `Fa`, on peut écrire `∀x Fx`, **à condition** que `a` soit un nom **arbitraire** : il ne doit apparaître dans aucune prémisse ni hypothèse en cours, ni dans la formule obtenue.\n\nIdée : si l'on a démontré que a est F sans rien supposer de particulier sur a, le raisonnement vaut pour n'importe quel objet.",
+          "examples": [
+            {
+              "text": "∀x(Fx ∧ Gx) ⊢ ∀x Fx",
+              "proof": { "premises": ["∀x(Fx ∧ Gx)"], "lines": [{ "d": 0, "f": "Fa ∧ Ga", "r": "∀E", "c": "1" }, { "d": 0, "f": "Fa", "r": "∧E", "c": "2" }, { "d": 0, "f": "∀x Fx", "r": "∀I", "c": "3" }] }
+            }
+          ]
+        },
+        {
+          "title": "Élimination de ∃",
+          "body": "**∃E** : de `∃x Fx`, on ne sait pas *quel* objet est F. On lui donne un **nom nouveau** dans une hypothèse, `Fa`, et on raisonne. Si l'on aboutit à une conclusion `C` qui ne mentionne pas `a`, on peut écrire `C` hors de la sous-preuve. Justification : « ∃E m, i-j ».\n\nLe nom doit être **nouveau** : absent de `∃x Fx`, de `C`, et de toute prémisse ou hypothèse en cours."
+        },
+        {
+          "title": "Conversion des quantificateurs",
+          "body": "**CQ** permet de passer en une ligne de :\n- `¬∃x A` à `∀x ¬A` (et inversement) ;\n- `¬∀x A` à `∃x ¬A` (et inversement)."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c5-22",
+          "type": "proof",
+          "premises": ["∀x(Fx ∧ Gx)"],
+          "conclusion": "∀x Fx",
+          "solution": [{ "d": 0, "f": "Fa ∧ Ga", "r": "∀E", "c": "1" }, { "d": 0, "f": "Fa", "r": "∧E", "c": "2" }, { "d": 0, "f": "∀x Fx", "r": "∀I", "c": "3" }]
+        },
+        {
+          "id": "c5-23",
+          "type": "mcq",
+          "prompt": "Pourquoi ne peut-on pas tirer `∀x Fx` de la prémisse `Fa` par ∀I ?",
+          "choices": ["Parce que a apparaît dans une prémisse : il n'est pas arbitraire", "Parce que ∀I demande une sous-preuve", "On le peut"],
+          "answer": 0,
+          "explanation": "Que Socrate soit sage ne prouve pas que tout le monde l'est."
+        },
+        {
+          "id": "c5-24",
+          "type": "proof",
+          "premises": ["∃x(Fx ∧ Gx)"],
+          "conclusion": "∃x Fx",
+          "solution": [{ "d": 1, "f": "Fa ∧ Ga", "r": "Hyp" }, { "d": 1, "f": "Fa", "r": "∧E", "c": "2" }, { "d": 1, "f": "∃x Fx", "r": "∃I", "c": "3" }, { "d": 0, "f": "∃x Fx", "r": "∃E", "c": "1, 2-4" }]
+        },
+        {
+          "id": "c5-25",
+          "type": "proof",
+          "justifyOnly": true,
+          "premises": ["∃x Fx", "∀x(Fx → Gx)"],
+          "conclusion": "∃x Gx",
+          "given": [{ "d": 1, "f": "Fa" }, { "d": 1, "f": "Fa → Ga" }, { "d": 1, "f": "Ga" }, { "d": 1, "f": "∃x Gx" }, { "d": 0, "f": "∃x Gx" }],
+          "solution": [{ "d": 1, "f": "Fa", "r": "Hyp" }, { "d": 1, "f": "Fa → Ga", "r": "∀E", "c": "2" }, { "d": 1, "f": "Ga", "r": "→E", "c": "4, 3" }, { "d": 1, "f": "∃x Gx", "r": "∃I", "c": "5" }, { "d": 0, "f": "∃x Gx", "r": "∃E", "c": "1, 3-6" }]
+        },
+        {
+          "id": "c5-26",
+          "type": "mcq",
+          "prompt": "Dans ∃E, pourquoi le nom de l'hypothèse doit-il être nouveau ?",
+          "choices": ["On ne sait rien de l'objet qui existe : il ne faut pas le confondre avec un objet déjà nommé", "Pour que la preuve soit plus courte", "Ce n'est pas obligatoire"],
+          "answer": 0
+        },
+        {
+          "id": "c5-27",
+          "type": "proof",
+          "premises": ["¬∃x Fx"],
+          "conclusion": "∀x¬Fx",
+          "solution": [{ "d": 0, "f": "∀x¬Fx", "r": "CQ", "c": "1" }]
+        },
+        {
+          "id": "c5-28",
+          "type": "proof",
+          "premises": ["∀x(Fx → Gx)", "∀x(Gx → Hx)"],
+          "conclusion": "∀x(Fx → Hx)",
+          "solution": [
+            { "d": 0, "f": "Fa → Ga", "r": "∀E", "c": "1" },
+            { "d": 0, "f": "Ga → Ha", "r": "∀E", "c": "2" },
+            { "d": 1, "f": "Fa", "r": "Hyp" },
+            { "d": 1, "f": "Ga", "r": "→E", "c": "3, 5" },
+            { "d": 1, "f": "Ha", "r": "→E", "c": "4, 6" },
+            { "d": 0, "f": "Fa → Ha", "r": "→I", "c": "5-7" },
+            { "d": 0, "f": "∀x(Fx → Hx)", "r": "∀I", "c": "8" }
+          ],
+          "explanation": "C'est le syllogisme Barbara : tous les F sont G, tous les G sont H, donc tous les F sont H."
+        }
+      ]
+    }
+  ],
+  "test": {
+    "size": 9,
+    "exercises": [
+      {
+        "id": "c5-t1",
+        "type": "proof",
+        "premises": ["∀x Fx ∨ ∀x Gx"],
+        "conclusion": "∀x(Fx ∨ Gx)",
+        "solution": [
+          { "d": 1, "f": "∀x Fx", "r": "Hyp" },
+          { "d": 1, "f": "Fa", "r": "∀E", "c": "2" },
+          { "d": 1, "f": "Fa ∨ Ga", "r": "∨I", "c": "3" },
+          { "d": 1, "f": "∀x(Fx ∨ Gx)", "r": "∀I", "c": "4" },
+          { "d": 1, "f": "∀x Gx", "r": "Hyp" },
+          { "d": 1, "f": "Ga", "r": "∀E", "c": "6" },
+          { "d": 1, "f": "Fa ∨ Ga", "r": "∨I", "c": "7" },
+          { "d": 1, "f": "∀x(Fx ∨ Gx)", "r": "∀I", "c": "8" },
+          { "d": 0, "f": "∀x(Fx ∨ Gx)", "r": "∨E", "c": "1, 2-5, 6-9" }
+        ]
+      },
+      {
+        "id": "c5-t2",
+        "type": "buildmodel",
+        "prompt": "« Tous les F sont G ; quelque chose est G ; donc quelque chose est F. » Construis un contre-modèle.",
+        "true": ["∀x(Fx → Gx)", "∃x Gx"],
+        "false": ["∃x Fx"]
+      }
+    ]
+  }
+}

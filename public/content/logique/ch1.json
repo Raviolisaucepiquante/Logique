@@ -1,0 +1,419 @@
+{
+  "id": "ch1",
+  "title": "Logique propositionnelle",
+  "summary": "Connecteurs, formalisation et tables de vérité.",
+  "symbols": ["¬", "∧", "∨", "→", "↔", "(", ")"],
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Négation et conjonction",
+      "cours": [
+        {
+          "title": "Des lettres pour les phrases",
+          "body": "On remplace chaque phrase simple par une **lettre de proposition** : `p`, `q`, `r`… Une phrase simple est soit vraie (**V**), soit fausse (**F**).\n\nOn construit ensuite des phrases complexes avec des **connecteurs**.",
+          "examples": [
+            { "text": "p : « il pleut » ; q : « il fait froid »" }
+          ]
+        },
+        {
+          "title": "La négation ¬",
+          "body": "`¬p` se lit « non p ». Elle est vraie quand `p` est fausse, et fausse quand `p` est vraie.\n\nEn français : « il ne pleut pas », « il est faux qu'il pleuve ».",
+          "examples": [
+            { "formula": "¬p", "note": "« Il ne pleut pas »" }
+          ]
+        },
+        {
+          "title": "La conjonction ∧",
+          "body": "`p ∧ q` se lit « p et q ». Elle est vraie **seulement** quand `p` et `q` sont toutes les deux vraies.\n\n« Mais », « pourtant », « bien que », « et aussi » se formalisent aussi par ∧ : la nuance d'opposition n'a pas d'effet sur la vérité.",
+          "examples": [
+            { "text": "Il pleut mais il ne fait pas froid.", "formula": "p ∧ ¬q" }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c1-1",
+          "type": "mcq",
+          "prompt": "Si `p` est vraie, que vaut `¬p` ?",
+          "choices": ["Faux", "Vrai", "Ça dépend de q"],
+          "answer": 0
+        },
+        {
+          "id": "c1-2",
+          "type": "mcq",
+          "prompt": "`p` est vraie et `q` est fausse. Que vaut `p ∧ q` ?",
+          "choices": ["Faux", "Vrai"],
+          "answer": 0,
+          "explanation": "Une conjonction n'est vraie que si ses deux membres sont vrais."
+        },
+        {
+          "id": "c1-3",
+          "type": "formalize",
+          "sentence": "Il pleut et il fait froid.",
+          "legend": { "p": "il pleut", "q": "il fait froid" },
+          "answer": "p ∧ q"
+        },
+        {
+          "id": "c1-4",
+          "type": "formalize",
+          "sentence": "Il ne pleut pas.",
+          "legend": { "p": "il pleut" },
+          "answer": "¬p"
+        },
+        {
+          "id": "c1-5",
+          "type": "formalize",
+          "sentence": "Marie est venue, mais Paul n'est pas venu.",
+          "legend": { "m": "Marie est venue", "p": "Paul est venu" },
+          "answer": "m ∧ ¬p",
+          "explanation": "« Mais » se formalise par ∧."
+        },
+        {
+          "id": "c1-6",
+          "type": "truthtable",
+          "formula": "p ∧ q"
+        },
+        {
+          "id": "c1-7",
+          "type": "mcq",
+          "prompt": "Que vaut `¬¬p` quand `p` est fausse ?",
+          "choices": ["Faux", "Vrai"],
+          "answer": 0,
+          "explanation": "Deux négations s'annulent : ¬¬p a toujours la même valeur que p."
+        },
+        {
+          "id": "c1-8",
+          "type": "formalize",
+          "sentence": "Il ne pleut pas et il ne fait pas froid.",
+          "legend": { "p": "il pleut", "q": "il fait froid" },
+          "answer": "¬p ∧ ¬q"
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Disjonction et implication",
+      "cours": [
+        {
+          "title": "La disjonction ∨",
+          "body": "`p ∨ q` se lit « p ou q ». Elle est vraie quand **au moins une** des deux est vraie, y compris quand les deux le sont : c'est le *ou inclusif*.\n\nLe *ou exclusif* (« soit… soit… », « fromage ou dessert ») s'écrit `(p ∨ q) ∧ ¬(p ∧ q)`.",
+          "examples": [
+            { "text": "Je prends le bus ou le métro.", "formula": "b ∨ m" }
+          ]
+        },
+        {
+          "title": "L'implication →",
+          "body": "`p → q` se lit « si p, alors q ». `p` est l'**antécédent**, `q` le **conséquent**.\n\nElle n'est fausse que dans un cas : `p` vraie et `q` fausse. Quand `p` est fausse, l'implication est vraie : la promesse « s'il pleut, je prends mon parapluie » n'est pas trahie un jour sans pluie."
+        },
+        {
+          "title": "Les pièges du français",
+          "body": "- « q **si** p » : `p → q`\n- « p **seulement si** q » : `p → q`\n- « p est une condition **suffisante** pour q » : `p → q`\n- « p est une condition **nécessaire** pour q » : `q → p`\n- « p **à moins que** q » : `¬q → p`, équivalent à `p ∨ q`",
+          "examples": [
+            { "text": "Tu réussiras seulement si tu travailles.", "formula": "r → t", "note": "Réussir exige de travailler : si tu réussis, c'est que tu as travaillé." }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c1-9",
+          "type": "mcq",
+          "prompt": "`p` et `q` sont vraies. Que vaut `p ∨ q` ?",
+          "choices": ["Vrai", "Faux"],
+          "answer": 0,
+          "explanation": "Le ∨ de la logique est inclusif."
+        },
+        {
+          "id": "c1-10",
+          "type": "mcq",
+          "prompt": "Dans quel cas `p → q` est-elle fausse ?",
+          "choices": ["p vraie et q fausse", "p fausse et q vraie", "p et q fausses", "Jamais"],
+          "answer": 0
+        },
+        {
+          "id": "c1-11",
+          "type": "formalize",
+          "sentence": "S'il pleut, la route est mouillée.",
+          "legend": { "p": "il pleut", "m": "la route est mouillée" },
+          "answer": "p → m"
+        },
+        {
+          "id": "c1-12",
+          "type": "formalize",
+          "sentence": "Tu auras ton diplôme seulement si tu passes l'examen.",
+          "legend": { "d": "tu auras ton diplôme", "e": "tu passes l'examen" },
+          "answer": "d → e",
+          "explanation": "« p seulement si q » se formalise p → q : avoir le diplôme exige l'examen."
+        },
+        {
+          "id": "c1-13",
+          "type": "truthtable",
+          "formula": "p → q"
+        },
+        {
+          "id": "c1-14",
+          "type": "formalize",
+          "sentence": "La plante mourra si on ne l'arrose pas.",
+          "legend": { "m": "la plante mourra", "a": "on arrose la plante" },
+          "answer": "¬a → m",
+          "explanation": "« q si p » se formalise p → q : ici la condition est « on ne l'arrose pas »."
+        },
+        {
+          "id": "c1-15",
+          "type": "formalize",
+          "sentence": "Nous sortirons, à moins qu'il ne pleuve.",
+          "legend": { "s": "nous sortirons", "p": "il pleut" },
+          "answer": "s ∨ p",
+          "explanation": "« p à moins que q » équivaut à ¬q → p, c'est-à-dire p ∨ q. Les deux écritures sont acceptées."
+        },
+        {
+          "id": "c1-16",
+          "type": "mcq",
+          "prompt": "« Avoir 18 ans est une condition nécessaire pour voter. » Avec v : « on vote » et d : « on a 18 ans », cela donne :",
+          "choices": ["v → d", "d → v", "v ∧ d"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "Une condition nécessaire est ce qu'implique la chose : si on vote, alors on a 18 ans."
+        },
+        {
+          "id": "c1-17",
+          "type": "mcq",
+          "prompt": "`p` est fausse et `q` est fausse. Que vaut `p → q` ?",
+          "choices": ["Vrai", "Faux"],
+          "answer": 0,
+          "explanation": "Antécédent faux : l'implication est vraie."
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Biconditionnel et parenthèses",
+      "cours": [
+        {
+          "title": "Le biconditionnel ↔",
+          "body": "`p ↔ q` se lit « p si et seulement si q ». Il est vrai quand `p` et `q` ont **la même valeur** (toutes deux vraies ou toutes deux fausses).\n\nIl équivaut à `(p → q) ∧ (q → p)`.",
+          "examples": [
+            { "text": "Un nombre est pair si et seulement si il est divisible par 2.", "formula": "p ↔ d" }
+          ]
+        },
+        {
+          "title": "Parenthèses et connecteur principal",
+          "body": "Les parenthèses lèvent l'ambiguïté : `¬(p ∧ q)` (« pas les deux ») n'est pas `¬p ∧ q`.\n\nLe **connecteur principal** est celui qui s'applique en dernier, à la formule entière. Il en détermine la nature : `(p ∧ q) → r` est une implication, `p ∧ (q → r)` une conjonction.\n\nSans parenthèses, on lit ¬ avant ∧, ∧ avant ∨, ∨ avant →, → avant ↔."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c1-18",
+          "type": "mcq",
+          "prompt": "`p` est fausse et `q` est fausse. Que vaut `p ↔ q` ?",
+          "choices": ["Vrai", "Faux"],
+          "answer": 0,
+          "explanation": "Même valeur des deux côtés : le biconditionnel est vrai."
+        },
+        {
+          "id": "c1-19",
+          "type": "mcq",
+          "prompt": "Quel est le connecteur principal de `¬(p ∧ q) → r` ?",
+          "choices": ["→", "¬", "∧"],
+          "formulas": true,
+          "answer": 0
+        },
+        {
+          "id": "c1-20",
+          "type": "mcq",
+          "prompt": "Quel est le connecteur principal de `¬(p ∨ q)` ?",
+          "choices": ["¬", "∨"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "La négation porte sur toute la parenthèse : elle s'applique en dernier."
+        },
+        {
+          "id": "c1-21",
+          "type": "formalize",
+          "sentence": "Il est faux qu'il pleuve et qu'il fasse froid.",
+          "legend": { "p": "il pleut", "q": "il fait froid" },
+          "answer": "¬(p ∧ q)",
+          "explanation": "La négation porte sur la conjonction entière."
+        },
+        {
+          "id": "c1-22",
+          "type": "formalize",
+          "sentence": "La lampe s'allume si et seulement si on appuie sur l'interrupteur.",
+          "legend": { "l": "la lampe s'allume", "i": "on appuie sur l'interrupteur" },
+          "answer": "l ↔ i"
+        },
+        {
+          "id": "c1-23",
+          "type": "truthtable",
+          "formula": "p ↔ q"
+        },
+        {
+          "id": "c1-24",
+          "type": "formalize",
+          "sentence": "Si Jean vient et que Marie ne vient pas, la fête sera ratée.",
+          "legend": { "j": "Jean vient", "m": "Marie vient", "f": "la fête sera ratée" },
+          "answer": "(j ∧ ¬m) → f"
+        },
+        {
+          "id": "c1-25",
+          "type": "mcq",
+          "prompt": "Que vaut `(p ∨ q) → r` si `p` est vraie, `q` fausse et `r` fausse ?",
+          "choices": ["Faux", "Vrai"],
+          "answer": 0,
+          "explanation": "p ∨ q est vraie, r est fausse : l'implication est fausse."
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "Tables de vérité",
+      "cours": [
+        {
+          "title": "Construire une table",
+          "body": "Une **table de vérité** donne la valeur d'une formule pour chaque **valuation**, c'est-à-dire chaque façon d'attribuer V ou F aux lettres.\n\nAvec *n* lettres, il y a 2ⁿ lignes : 4 lignes pour 2 lettres, 8 pour 3. On les écrit dans un ordre fixe : la première lettre change le plus lentement, et V vient avant F.\n\nOn calcule de l'intérieur vers l'extérieur : d'abord les sous-formules, puis le connecteur principal."
+        },
+        {
+          "title": "Méthode, colonne par colonne",
+          "body": "Pour `¬p ∨ q` :\n- on calcule la colonne `¬p` en inversant `p` ;\n- puis la colonne `¬p ∨ q` : V dès qu'une des deux colonnes contient V.\n\nRésultat : F seulement à la ligne p = V, q = F. C'est la même colonne que `p → q`, nous y reviendrons."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c1-26",
+          "type": "mcq",
+          "prompt": "Combien de lignes compte la table de vérité d'une formule à 3 lettres ?",
+          "choices": ["8", "6", "9", "3"],
+          "answer": 0,
+          "explanation": "2 × 2 × 2 = 8 valuations."
+        },
+        {
+          "id": "c1-27",
+          "type": "truthtable",
+          "formula": "p ∨ q"
+        },
+        {
+          "id": "c1-28",
+          "type": "truthtable",
+          "formula": "¬p ∨ q",
+          "columns": ["¬p", "¬p ∨ q"]
+        },
+        {
+          "id": "c1-29",
+          "type": "truthtable",
+          "formula": "¬(p ∧ q)",
+          "columns": ["p ∧ q", "¬(p ∧ q)"]
+        },
+        {
+          "id": "c1-30",
+          "type": "truthtable",
+          "formula": "(p → q) ∧ p",
+          "columns": ["p → q", "(p → q) ∧ p"]
+        },
+        {
+          "id": "c1-31",
+          "type": "mcq",
+          "prompt": "Combien de lignes de la table de `p ∧ q ∧ r` sont vraies ?",
+          "choices": ["1", "3", "4", "7"],
+          "answer": 0,
+          "explanation": "Une seule ligne : celle où les trois lettres sont vraies."
+        },
+        {
+          "id": "c1-32",
+          "type": "truthtable",
+          "formula": "(p ∧ q) → r"
+        }
+      ]
+    },
+    {
+      "id": "l5",
+      "title": "Formaliser",
+      "cours": [
+        {
+          "title": "Méthode",
+          "body": "- Repère les **phrases simples** et donne à chacune une lettre (sans négation : « il pleut », pas « il ne pleut pas »).\n- Repère les **connecteurs** : *non*, *et*, *ou*, *si… alors*, *seulement si*, *si et seulement si*, *à moins que*, *ni… ni*.\n- Trouve le **connecteur principal** et place les parenthèses.\n\nUne formalisation est correcte si elle a les mêmes conditions de vérité que la phrase : l'application accepte toute formule **équivalente**.",
+          "examples": [
+            { "text": "Ni Pierre ni Paul ne sont venus.", "formula": "¬p ∧ ¬q", "note": "ou, de manière équivalente, ¬(p ∨ q)" }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c1-33",
+          "type": "formalize",
+          "sentence": "Ni Pierre ni Paul ne sont venus.",
+          "legend": { "p": "Pierre est venu", "q": "Paul est venu" },
+          "answer": "¬p ∧ ¬q"
+        },
+        {
+          "id": "c1-34",
+          "type": "formalize",
+          "sentence": "Si tu ne te dépêches pas, tu rateras le train ou tu arriveras en retard.",
+          "legend": { "d": "tu te dépêches", "t": "tu rateras le train", "r": "tu arriveras en retard" },
+          "answer": "¬d → (t ∨ r)"
+        },
+        {
+          "id": "c1-35",
+          "type": "formalize",
+          "sentence": "Soit il pleut, soit il fait beau, mais pas les deux.",
+          "legend": { "p": "il pleut", "b": "il fait beau" },
+          "answer": "(p ∨ b) ∧ ¬(p ∧ b)",
+          "explanation": "C'est le « ou exclusif ». ¬(p ↔ b) est aussi accepté : c'est équivalent."
+        },
+        {
+          "id": "c1-36",
+          "type": "formalize",
+          "sentence": "Le gâteau sera réussi seulement si le four est chaud et la pâte a levé.",
+          "legend": { "g": "le gâteau sera réussi", "f": "le four est chaud", "l": "la pâte a levé" },
+          "answer": "g → (f ∧ l)"
+        },
+        {
+          "id": "c1-37",
+          "type": "formalize",
+          "sentence": "Je viendrai si tu viens, et seulement si tu viens.",
+          "legend": { "j": "je viendrai", "t": "tu viens" },
+          "answer": "j ↔ t"
+        },
+        {
+          "id": "c1-38",
+          "type": "mcq",
+          "prompt": "« Il n'est pas vrai que, s'il pleut, il fait froid. » Quelle formalisation est correcte (p : il pleut, q : il fait froid) ?",
+          "choices": ["¬(p → q)", "¬p → q", "p → ¬q"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "La négation porte sur toute l'implication."
+        },
+        {
+          "id": "c1-39",
+          "type": "formalize",
+          "sentence": "Si Anne ou Bruno viennent, Claire viendra aussi.",
+          "legend": { "a": "Anne vient", "b": "Bruno vient", "c": "Claire vient" },
+          "answer": "(a ∨ b) → c"
+        },
+        {
+          "id": "c1-40",
+          "type": "formula",
+          "prompt": "Écris le « ou exclusif » de `p` et `q` : vrai quand une seule des deux est vraie.",
+          "answer": "(p ∨ q) ∧ ¬(p ∧ q)"
+        }
+      ]
+    }
+  ],
+  "test": {
+    "size": 10,
+    "exercises": [
+      {
+        "id": "c1-t1",
+        "type": "formalize",
+        "sentence": "Si le café est froid, je ne le bois pas, à moins qu'il soit sucré.",
+        "legend": { "f": "le café est froid", "b": "je bois le café", "s": "le café est sucré" },
+        "answer": "f → (¬b ∨ s)",
+        "explanation": "« Je ne le bois pas, à moins qu'il soit sucré » donne ¬b ∨ s ; la condition f porte sur l'ensemble."
+      },
+      {
+        "id": "c1-t2",
+        "type": "truthtable",
+        "formula": "(p ∨ q) → ¬p",
+        "columns": ["p ∨ q", "¬p", "(p ∨ q) → ¬p"]
+      }
+    ]
+  }
+}

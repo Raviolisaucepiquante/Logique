@@ -1,0 +1,494 @@
+{
+  "id": "ch3",
+  "title": "Déduction naturelle",
+  "summary": "Démontrer pas à pas, avec des règles d'introduction et d'élimination.",
+  "symbols": ["¬", "∧", "∨", "→", "↔", "⊥", "(", ")"],
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Preuves de Fitch : ∧ et →E",
+      "cours": [
+        {
+          "title": "Une preuve, ligne par ligne",
+          "body": "Les tables de vérité deviennent vite énormes. La **déduction naturelle** montre qu'un argument est valide en avançant pas à pas.\n\nUne preuve est une suite de lignes numérotées. Chaque ligne contient une formule et sa **justification** : la règle utilisée et les numéros des lignes citées. Les prémisses viennent en premier, au-dessus d'un trait. La preuve est terminée quand la dernière ligne est la conclusion.",
+          "examples": [
+            {
+              "text": "p ∧ q ⊢ q ∧ p (le signe ⊢ se lit « on peut démontrer »)",
+              "proof": { "premises": ["p ∧ q"], "lines": [{ "d": 0, "f": "q", "r": "∧E", "c": "1" }, { "d": 0, "f": "p", "r": "∧E", "c": "1" }, { "d": 0, "f": "q ∧ p", "r": "∧I", "c": "2, 3" }] }
+            }
+          ]
+        },
+        {
+          "title": "Règles de la conjonction",
+          "body": "- **∧I** (introduction) : de `A` (ligne m) et `B` (ligne n), on écrit `A ∧ B`, justifié par « ∧I m, n ».\n- **∧E** (élimination) : de `A ∧ B` (ligne m), on écrit `A`, ou bien `B`, justifié par « ∧E m ».\n- **R** (réitération) : on recopie une ligne déjà obtenue.\n\nIci `A` et `B` désignent des formules quelconques, simples ou complexes."
+        },
+        {
+          "title": "Élimination de l'implication",
+          "body": "**→E** (*modus ponens*) : de `A → B` (ligne m) et de `A` (ligne n), on écrit `B`, justifié par « →E m, n ».",
+          "examples": [
+            { "proof": { "premises": ["p → q", "p"], "lines": [{ "d": 0, "f": "q", "r": "→E", "c": "1, 2" }] } }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c3-1",
+          "type": "mcq",
+          "prompt": "Que faut-il citer pour appliquer →E et obtenir `B` ?",
+          "choices": ["Une ligne `A → B` et une ligne `A`", "Une ligne `A → B` et une ligne `B`", "Une seule ligne `A → B`"],
+          "answer": 0
+        },
+        {
+          "id": "c3-2",
+          "type": "proof",
+          "justifyOnly": true,
+          "premises": ["p ∧ q"],
+          "conclusion": "q ∧ p",
+          "rules": ["R", "∧I", "∧E", "→E"],
+          "given": [{ "d": 0, "f": "q" }, { "d": 0, "f": "p" }, { "d": 0, "f": "q ∧ p" }],
+          "solution": [{ "d": 0, "f": "q", "r": "∧E", "c": "1" }, { "d": 0, "f": "p", "r": "∧E", "c": "1" }, { "d": 0, "f": "q ∧ p", "r": "∧I", "c": "2, 3" }]
+        },
+        {
+          "id": "c3-3",
+          "type": "proof",
+          "premises": ["p → q", "p"],
+          "conclusion": "q",
+          "rules": ["R", "∧I", "∧E", "→E"],
+          "solution": [{ "d": 0, "f": "q", "r": "→E", "c": "1, 2" }]
+        },
+        {
+          "id": "c3-4",
+          "type": "mcq",
+          "prompt": "La ligne 1 est `p ∧ q`. Que peut-on écrire avec « ∧E 1 » ?",
+          "choices": ["q", "p → q", "q ∧ r"],
+          "formulas": true,
+          "answer": 0
+        },
+        {
+          "id": "c3-5",
+          "type": "proof",
+          "premises": ["p ∧ q"],
+          "conclusion": "q ∧ p",
+          "rules": ["R", "∧I", "∧E", "→E"],
+          "solution": [{ "d": 0, "f": "q", "r": "∧E", "c": "1" }, { "d": 0, "f": "p", "r": "∧E", "c": "1" }, { "d": 0, "f": "q ∧ p", "r": "∧I", "c": "2, 3" }]
+        },
+        {
+          "id": "c3-6",
+          "type": "proof",
+          "premises": ["p", "p → q", "q → r"],
+          "conclusion": "r",
+          "rules": ["R", "∧I", "∧E", "→E"],
+          "solution": [{ "d": 0, "f": "q", "r": "→E", "c": "2, 1" }, { "d": 0, "f": "r", "r": "→E", "c": "3, 4" }],
+          "explanation": "Deux modus ponens à la suite : on obtient q, puis r."
+        },
+        {
+          "id": "c3-7",
+          "type": "proof",
+          "premises": ["p ∧ (p → q)"],
+          "conclusion": "q",
+          "rules": ["R", "∧I", "∧E", "→E"],
+          "solution": [{ "d": 0, "f": "p", "r": "∧E", "c": "1" }, { "d": 0, "f": "p → q", "r": "∧E", "c": "1" }, { "d": 0, "f": "q", "r": "→E", "c": "3, 2" }]
+        },
+        {
+          "id": "c3-8",
+          "type": "mcq",
+          "prompt": "Dans la justification « →E 1, 2 », que désignent 1 et 2 ?",
+          "choices": ["Les numéros des lignes utilisées", "Le nombre de prémisses", "La profondeur de la sous-preuve"],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Hypothèses et →I",
+      "cours": [
+        {
+          "title": "Supposer pour démontrer",
+          "body": "Pour démontrer `A → B`, on **suppose** `A` et on cherche `B`. L'hypothèse ouvre une **sous-preuve**, décalée vers la droite par un nouveau trait vertical.\n\nQuand on a obtenu `B`, on **ferme** la sous-preuve et on écrit `A → B` au niveau d'en dessous, justifié par **→I** et l'intervalle de la sous-preuve (par exemple « →I 3-5 »).",
+          "examples": [
+            {
+              "text": "p → q, q → r ⊢ p → r",
+              "proof": { "premises": ["p → q", "q → r"], "lines": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "q", "r": "→E", "c": "1, 3" }, { "d": 1, "f": "r", "r": "→E", "c": "2, 4" }, { "d": 0, "f": "p → r", "r": "→I", "c": "3-5" }] }
+            }
+          ]
+        },
+        {
+          "title": "Ce qui reste accessible",
+          "body": "Dans une sous-preuve, on peut citer les lignes au-dessus d'elle, y compris les prémisses.\n\nUne fois la sous-preuve fermée, ses lignes ne sont **plus accessibles** : elles dépendaient d'une hypothèse qu'on a abandonnée. On ne peut plus citer que la sous-preuve **entière**, sous la forme « 3-5 ».\n\nUne preuve n'est terminée que lorsque toutes ses sous-preuves sont fermées."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c3-9",
+          "type": "mcq",
+          "prompt": "Quand peut-on citer une ligne qui se trouve dans une sous-preuve ?",
+          "choices": ["Seulement tant que cette sous-preuve est ouverte", "N'importe où après elle", "Jamais"],
+          "answer": 0
+        },
+        {
+          "id": "c3-10",
+          "type": "proof",
+          "justifyOnly": true,
+          "premises": ["p → q", "q → r"],
+          "conclusion": "p → r",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E"],
+          "given": [{ "d": 1, "f": "p" }, { "d": 1, "f": "q" }, { "d": 1, "f": "r" }, { "d": 0, "f": "p → r" }],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "q", "r": "→E", "c": "1, 3" }, { "d": 1, "f": "r", "r": "→E", "c": "2, 4" }, { "d": 0, "f": "p → r", "r": "→I", "c": "3-5" }]
+        },
+        {
+          "id": "c3-11",
+          "type": "proof",
+          "prompt": "Démontre sans prémisse (commence par une hypothèse) :",
+          "premises": [],
+          "conclusion": "p → p",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E"],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "p", "r": "R", "c": "1" }, { "d": 0, "f": "p → p", "r": "→I", "c": "1-2" }],
+          "explanation": "Une formule démontrable sans prémisse est un théorème : c'est l'équivalent, pour les preuves, d'une tautologie."
+        },
+        {
+          "id": "c3-12",
+          "type": "proof",
+          "premises": ["p"],
+          "conclusion": "q → p",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E"],
+          "solution": [{ "d": 1, "f": "q", "r": "Hyp" }, { "d": 1, "f": "p", "r": "R", "c": "1" }, { "d": 0, "f": "q → p", "r": "→I", "c": "2-3" }],
+          "explanation": "Dans la sous-preuve, on réitère p, accessible depuis les prémisses."
+        },
+        {
+          "id": "c3-13",
+          "type": "proof",
+          "premises": ["p → q", "q → r"],
+          "conclusion": "p → r",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E"],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "q", "r": "→E", "c": "1, 3" }, { "d": 1, "f": "r", "r": "→E", "c": "2, 4" }, { "d": 0, "f": "p → r", "r": "→I", "c": "3-5" }]
+        },
+        {
+          "id": "c3-14",
+          "type": "mcq",
+          "prompt": "Que cite-t-on pour justifier `A → B` par →I ?",
+          "choices": ["Une sous-preuve qui commence par l'hypothèse `A` et finit par `B`", "Une ligne `A` et une ligne `B`", "Une ligne `B` seulement"],
+          "answer": 0
+        },
+        {
+          "id": "c3-15",
+          "type": "proof",
+          "premises": ["(p ∧ q) → r"],
+          "conclusion": "p → (q → r)",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E"],
+          "solution": [
+            { "d": 1, "f": "p", "r": "Hyp" },
+            { "d": 2, "f": "q", "r": "Hyp" },
+            { "d": 2, "f": "p ∧ q", "r": "∧I", "c": "2, 3" },
+            { "d": 2, "f": "r", "r": "→E", "c": "1, 4" },
+            { "d": 1, "f": "q → r", "r": "→I", "c": "3-5" },
+            { "d": 0, "f": "p → (q → r)", "r": "→I", "c": "2-6" }
+          ],
+          "explanation": "Deux sous-preuves imbriquées : une hypothèse pour chaque antécédent."
+        },
+        {
+          "id": "c3-16",
+          "type": "proof",
+          "premises": ["p → (q → r)"],
+          "conclusion": "(p ∧ q) → r",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E"],
+          "solution": [
+            { "d": 1, "f": "p ∧ q", "r": "Hyp" },
+            { "d": 1, "f": "p", "r": "∧E", "c": "2" },
+            { "d": 1, "f": "q", "r": "∧E", "c": "2" },
+            { "d": 1, "f": "q → r", "r": "→E", "c": "1, 3" },
+            { "d": 1, "f": "r", "r": "→E", "c": "5, 4" },
+            { "d": 0, "f": "(p ∧ q) → r", "r": "→I", "c": "2-6" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Disjonction et biconditionnel",
+      "cours": [
+        {
+          "title": "Introduire et éliminer ∨",
+          "body": "- **∨I** : de `A` (ligne m), on écrit `A ∨ B` ou `B ∨ A`, pour n'importe quelle formule `B`. Justification : « ∨I m ».\n- **∨E** (raisonnement par cas) : de `A ∨ B` (ligne m), d'une sous-preuve de `A` à `C` (i-j) et d'une sous-preuve de `B` à `C` (k-l), on écrit `C`. Justification : « ∨E m, i-j, k-l ».\n\nLes deux sous-preuves se suivent : on ferme la première et on ouvre aussitôt la seconde (bouton « Hypothèse suivante »).",
+          "examples": [
+            {
+              "proof": { "premises": ["p ∨ q", "p → r", "q → r"], "lines": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "r", "r": "→E", "c": "2, 4" }, { "d": 1, "f": "q", "r": "Hyp" }, { "d": 1, "f": "r", "r": "→E", "c": "3, 6" }, { "d": 0, "f": "r", "r": "∨E", "c": "1, 4-5, 6-7" }] },
+              "note": "Dans les deux cas on obtient r : r est donc établi."
+            }
+          ]
+        },
+        {
+          "title": "Le biconditionnel",
+          "body": "- **↔I** : d'une sous-preuve de `A` à `B` et d'une sous-preuve de `B` à `A`, on écrit `A ↔ B`. Justification : « ↔I i-j, k-l ».\n- **↔E** : de `A ↔ B` et de `A`, on écrit `B` (et de `A ↔ B` et `B`, on écrit `A`). Justification : « ↔E m, n »."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c3-17",
+          "type": "mcq",
+          "prompt": "La ligne 1 est `p`. Que peut-on écrire avec « ∨I 1 » ?",
+          "choices": ["p ∨ r", "p ∧ r", "r"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "Si p est vraie, p ∨ r l'est aussi, quelle que soit r."
+        },
+        {
+          "id": "c3-18",
+          "type": "proof",
+          "premises": ["p"],
+          "conclusion": "p ∨ q",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "↔I", "↔E"],
+          "solution": [{ "d": 0, "f": "p ∨ q", "r": "∨I", "c": "1" }]
+        },
+        {
+          "id": "c3-19",
+          "type": "proof",
+          "justifyOnly": true,
+          "premises": ["p ∨ q"],
+          "conclusion": "q ∨ p",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "↔I", "↔E"],
+          "given": [{ "d": 1, "f": "p" }, { "d": 1, "f": "q ∨ p" }, { "d": 1, "f": "q" }, { "d": 1, "f": "q ∨ p" }, { "d": 0, "f": "q ∨ p" }],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "q ∨ p", "r": "∨I", "c": "2" }, { "d": 1, "f": "q", "r": "Hyp" }, { "d": 1, "f": "q ∨ p", "r": "∨I", "c": "4" }, { "d": 0, "f": "q ∨ p", "r": "∨E", "c": "1, 2-3, 4-5" }]
+        },
+        {
+          "id": "c3-20",
+          "type": "proof",
+          "premises": ["p ∨ q", "p → r", "q → r"],
+          "conclusion": "r",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "↔I", "↔E"],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "r", "r": "→E", "c": "2, 4" }, { "d": 1, "f": "q", "r": "Hyp" }, { "d": 1, "f": "r", "r": "→E", "c": "3, 6" }, { "d": 0, "f": "r", "r": "∨E", "c": "1, 4-5, 6-7" }]
+        },
+        {
+          "id": "c3-21",
+          "type": "mcq",
+          "prompt": "Pour conclure `C` par ∨E à partir de `A ∨ B`, il faut…",
+          "choices": ["une sous-preuve de `A` à `C` et une sous-preuve de `B` à `C`", "démontrer `A` et `B`", "une seule sous-preuve de `A` à `C`"],
+          "answer": 0
+        },
+        {
+          "id": "c3-22",
+          "type": "proof",
+          "premises": ["p ↔ q", "q"],
+          "conclusion": "p",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "↔I", "↔E"],
+          "solution": [{ "d": 0, "f": "p", "r": "↔E", "c": "1, 2" }]
+        },
+        {
+          "id": "c3-23",
+          "type": "proof",
+          "premises": ["p ∧ q"],
+          "conclusion": "p ↔ q",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "↔I", "↔E"],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "q", "r": "∧E", "c": "1" }, { "d": 1, "f": "q", "r": "Hyp" }, { "d": 1, "f": "p", "r": "∧E", "c": "1" }, { "d": 0, "f": "p ↔ q", "r": "↔I", "c": "2-3, 4-5" }]
+        },
+        {
+          "id": "c3-24",
+          "type": "proof",
+          "premises": ["(p ∨ q) → r"],
+          "conclusion": "p → r",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "↔I", "↔E"],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "p ∨ q", "r": "∨I", "c": "2" }, { "d": 1, "f": "r", "r": "→E", "c": "1, 3" }, { "d": 0, "f": "p → r", "r": "→I", "c": "2-4" }]
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "Négation et absurde",
+      "cours": [
+        {
+          "title": "La contradiction ⊥",
+          "body": "Le symbole `⊥` (« absurde ») représente une contradiction.\n\n- **¬E** : de `A` et de `¬A`, on écrit `⊥`. Justification : « ¬E m, n ».\n- **¬I** : d'une sous-preuve qui suppose `A` et aboutit à `⊥`, on écrit `¬A`. Si une hypothèse mène à l'absurde, elle est fausse.",
+          "examples": [
+            { "text": "p ⊢ ¬¬p", "proof": { "premises": ["p"], "lines": [{ "d": 1, "f": "¬p", "r": "Hyp" }, { "d": 1, "f": "⊥", "r": "¬E", "c": "1, 2" }, { "d": 0, "f": "¬¬p", "r": "¬I", "c": "2-3" }] } }
+          ]
+        },
+        {
+          "title": "Explosion et raisonnement par l'absurde",
+          "body": "- **X** (*ex falso quodlibet*) : de `⊥`, on peut écrire n'importe quelle formule.\n- **RA** (raisonnement par l'absurde) : d'une sous-preuve qui suppose `¬A` et aboutit à `⊥`, on écrit `A`.\n\n¬I et RA se ressemblent : ¬I supprime une hypothèse `A` en concluant `¬A` ; RA supprime une hypothèse `¬A` en concluant `A`."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c3-25",
+          "type": "mcq",
+          "prompt": "Que permet la règle ¬E ?",
+          "choices": ["De `A` et `¬A`, obtenir `⊥`", "De `¬¬A`, obtenir `A`", "De `⊥`, obtenir n'importe quelle formule"],
+          "answer": 0
+        },
+        {
+          "id": "c3-26",
+          "type": "proof",
+          "premises": ["p", "¬p"],
+          "conclusion": "⊥",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "¬I", "¬E", "X", "RA"],
+          "solution": [{ "d": 0, "f": "⊥", "r": "¬E", "c": "1, 2" }]
+        },
+        {
+          "id": "c3-27",
+          "type": "proof",
+          "premises": ["p", "¬p"],
+          "conclusion": "q",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "¬I", "¬E", "X", "RA"],
+          "solution": [{ "d": 0, "f": "⊥", "r": "¬E", "c": "1, 2" }, { "d": 0, "f": "q", "r": "X", "c": "3" }],
+          "explanation": "D'une contradiction on peut tout déduire."
+        },
+        {
+          "id": "c3-28",
+          "type": "proof",
+          "justifyOnly": true,
+          "premises": ["p → q", "¬q"],
+          "conclusion": "¬p",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "¬I", "¬E", "X", "RA"],
+          "given": [{ "d": 1, "f": "p" }, { "d": 1, "f": "q" }, { "d": 1, "f": "⊥" }, { "d": 0, "f": "¬p" }],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "q", "r": "→E", "c": "1, 3" }, { "d": 1, "f": "⊥", "r": "¬E", "c": "4, 2" }, { "d": 0, "f": "¬p", "r": "¬I", "c": "3-5" }],
+          "explanation": "C'est la démonstration du modus tollens."
+        },
+        {
+          "id": "c3-29",
+          "type": "proof",
+          "premises": ["p"],
+          "conclusion": "¬¬p",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "¬I", "¬E", "X", "RA"],
+          "solution": [{ "d": 1, "f": "¬p", "r": "Hyp" }, { "d": 1, "f": "⊥", "r": "¬E", "c": "1, 2" }, { "d": 0, "f": "¬¬p", "r": "¬I", "c": "2-3" }]
+        },
+        {
+          "id": "c3-30",
+          "type": "proof",
+          "premises": ["¬¬p"],
+          "conclusion": "p",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "¬I", "¬E", "X", "RA"],
+          "solution": [{ "d": 1, "f": "¬p", "r": "Hyp" }, { "d": 1, "f": "⊥", "r": "¬E", "c": "2, 1" }, { "d": 0, "f": "p", "r": "RA", "c": "2-3" }],
+          "explanation": "On suppose ¬p, on obtient une contradiction avec ¬¬p, donc p par l'absurde."
+        },
+        {
+          "id": "c3-31",
+          "type": "mcq",
+          "prompt": "Quelle est la différence entre ¬I et RA ?",
+          "choices": ["¬I suppose `A` et conclut `¬A` ; RA suppose `¬A` et conclut `A`", "Il n'y en a aucune", "RA n'utilise pas de sous-preuve"],
+          "answer": 0
+        },
+        {
+          "id": "c3-32",
+          "type": "proof",
+          "premises": ["p → q", "p → ¬q"],
+          "conclusion": "¬p",
+          "rules": ["Hyp", "R", "∧I", "∧E", "→I", "→E", "∨I", "∨E", "¬I", "¬E", "X", "RA"],
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "q", "r": "→E", "c": "1, 3" }, { "d": 1, "f": "¬q", "r": "→E", "c": "2, 3" }, { "d": 1, "f": "⊥", "r": "¬E", "c": "4, 5" }, { "d": 0, "f": "¬p", "r": "¬I", "c": "3-6" }]
+        }
+      ]
+    },
+    {
+      "id": "l5",
+      "title": "Règles dérivées et stratégie",
+      "cours": [
+        {
+          "title": "Des raccourcis démontrés",
+          "body": "Certaines combinaisons reviennent si souvent qu'on en fait des règles. Elles ne permettent rien de nouveau : on pourrait toujours les remplacer par les règles de base.\n\n- **MT** (*modus tollens*) : de `A → B` et `¬B`, on écrit `¬A`.\n- **DS** (syllogisme disjonctif) : de `A ∨ B` et `¬A`, on écrit `B` (ou de `¬B`, on écrit `A`).\n- **DNE** : de `¬¬A`, on écrit `A`.\n- **TND** (tiers exclu) : d'une sous-preuve de `A` à `C` et d'une sous-preuve de `¬A` à `C`, on écrit `C`."
+        },
+        {
+          "title": "Comment chercher une preuve",
+          "body": "Regarde le connecteur principal de ce que tu veux obtenir :\n- `A → B` : suppose `A`, cherche `B`, puis →I.\n- `¬A` : suppose `A`, cherche `⊥`, puis ¬I.\n- `A ∧ B` : obtiens `A` et `B` séparément, puis ∧I.\n- `A ↔ B` : deux sous-preuves, puis ↔I.\n\nRegarde aussi les prémisses : une disjonction appelle ∨E ou DS ; une implication appelle →E ou MT.\n\nSi rien ne marche, raisonne par l'absurde : suppose `¬A` et cherche `⊥`."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c3-33",
+          "type": "proof",
+          "premises": ["p → q", "¬q"],
+          "conclusion": "¬p",
+          "solution": [{ "d": 0, "f": "¬p", "r": "MT", "c": "1, 2" }],
+          "explanation": "Avec la règle dérivée MT, une ligne suffit."
+        },
+        {
+          "id": "c3-34",
+          "type": "proof",
+          "premises": ["p ∨ q", "¬p"],
+          "conclusion": "q",
+          "solution": [{ "d": 0, "f": "q", "r": "DS", "c": "1, 2" }]
+        },
+        {
+          "id": "c3-35",
+          "type": "mcq",
+          "prompt": "Pour démontrer `A → B`, on commence en général par…",
+          "choices": ["supposer `A` et chercher `B`", "supposer `B` et chercher `A`", "supposer `¬B`"],
+          "answer": 0
+        },
+        {
+          "id": "c3-36",
+          "type": "proof",
+          "premises": ["p → q"],
+          "conclusion": "¬q → ¬p",
+          "solution": [{ "d": 1, "f": "¬q", "r": "Hyp" }, { "d": 1, "f": "¬p", "r": "MT", "c": "1, 2" }, { "d": 0, "f": "¬q → ¬p", "r": "→I", "c": "2-3" }],
+          "explanation": "C'est la contraposée."
+        },
+        {
+          "id": "c3-37",
+          "type": "proof",
+          "premises": ["¬(p ∨ q)"],
+          "conclusion": "¬p",
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "p ∨ q", "r": "∨I", "c": "2" }, { "d": 1, "f": "⊥", "r": "¬E", "c": "3, 1" }, { "d": 0, "f": "¬p", "r": "¬I", "c": "2-4" }],
+          "explanation": "Pour obtenir une négation : supposer p et trouver une contradiction (une moitié de De Morgan)."
+        },
+        {
+          "id": "c3-38",
+          "type": "proof",
+          "prompt": "Démontre le tiers exclu, sans prémisse :",
+          "premises": [],
+          "conclusion": "p ∨ ¬p",
+          "solution": [{ "d": 1, "f": "p", "r": "Hyp" }, { "d": 1, "f": "p ∨ ¬p", "r": "∨I", "c": "1" }, { "d": 1, "f": "¬p", "r": "Hyp" }, { "d": 1, "f": "p ∨ ¬p", "r": "∨I", "c": "3" }, { "d": 0, "f": "p ∨ ¬p", "r": "TND", "c": "1-2, 3-4" }]
+        },
+        {
+          "id": "c3-39",
+          "type": "mcq",
+          "prompt": "Pour démontrer `¬A`, la stratégie habituelle est…",
+          "choices": ["supposer `A` et chercher `⊥`, puis ¬I", "supposer `¬A` et chercher `⊥`", "appliquer ∨I"],
+          "answer": 0
+        },
+        {
+          "id": "c3-40",
+          "type": "proof",
+          "premises": ["p ∨ q", "p → r", "¬r"],
+          "conclusion": "q",
+          "solution": [{ "d": 0, "f": "¬p", "r": "MT", "c": "2, 3" }, { "d": 0, "f": "q", "r": "DS", "c": "1, 4" }]
+        }
+      ]
+    }
+  ],
+  "test": {
+    "size": 8,
+    "exercises": [
+      {
+        "id": "c3-t1",
+        "type": "proof",
+        "premises": ["p → (q ∧ r)"],
+        "conclusion": "(p → q) ∧ (p → r)",
+        "solution": [
+          { "d": 1, "f": "p", "r": "Hyp" },
+          { "d": 1, "f": "q ∧ r", "r": "→E", "c": "1, 2" },
+          { "d": 1, "f": "q", "r": "∧E", "c": "3" },
+          { "d": 0, "f": "p → q", "r": "→I", "c": "2-4" },
+          { "d": 1, "f": "p", "r": "Hyp" },
+          { "d": 1, "f": "q ∧ r", "r": "→E", "c": "1, 6" },
+          { "d": 1, "f": "r", "r": "∧E", "c": "7" },
+          { "d": 0, "f": "p → r", "r": "→I", "c": "6-8" },
+          { "d": 0, "f": "(p → q) ∧ (p → r)", "r": "∧I", "c": "5, 9" }
+        ]
+      },
+      {
+        "id": "c3-t2",
+        "type": "proof",
+        "premises": ["¬p ∨ q"],
+        "conclusion": "p → q",
+        "solution": [
+          { "d": 1, "f": "p", "r": "Hyp" },
+          { "d": 2, "f": "¬p", "r": "Hyp" },
+          { "d": 2, "f": "⊥", "r": "¬E", "c": "2, 3" },
+          { "d": 2, "f": "q", "r": "X", "c": "4" },
+          { "d": 2, "f": "q", "r": "Hyp" },
+          { "d": 2, "f": "q", "r": "R", "c": "6" },
+          { "d": 1, "f": "q", "r": "∨E", "c": "1, 3-5, 6-7" },
+          { "d": 0, "f": "p → q", "r": "→I", "c": "2-8" }
+        ]
+      }
+    ]
+  }
+}

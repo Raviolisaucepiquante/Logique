@@ -1,0 +1,310 @@
+{
+  "id": "ch6",
+  "title": "Logique modale",
+  "summary": "Nécessité et possibilité, mondes possibles, systèmes K, T, S4, S5.",
+  "symbols": ["¬", "∧", "∨", "→", "↔", "□", "◇", "(", ")"],
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Nécessaire et possible",
+      "cours": [
+        {
+          "title": "Deux nouveaux opérateurs",
+          "body": "- `□p` : « il est **nécessaire** que p », « nécessairement p ».\n- `◇p` : « il est **possible** que p », « possiblement p ».\n\nCe sont des opérateurs, comme ¬ : ils s'appliquent à une formule. `□(p → q)` (« nécessairement, si p alors q ») n'est pas `p → □q` (« si p, alors nécessairement q »).",
+          "examples": [
+            { "text": "Il est possible qu'il pleuve.", "formula": "◇p" },
+            { "text": "Il est impossible que le triangle ait quatre côtés.", "formula": "¬◇q", "note": "ou, de façon équivalente, □¬q" }
+          ]
+        },
+        {
+          "title": "La dualité",
+          "body": "□ et ◇ se définissent l'un par l'autre :\n- `◇p ≡ ¬□¬p` : « possible » = « pas nécessairement faux » ;\n- `□p ≡ ¬◇¬p` : « nécessaire » = « impossible que ce soit faux ».\n\nUne proposition est **contingente** si elle est possible et que sa négation l'est aussi : `◇p ∧ ◇¬p`."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c6-1",
+          "type": "formalize",
+          "sentence": "Il est possible que Socrate soit sage.",
+          "legend": { "s": "Socrate est sage" },
+          "answer": "◇s"
+        },
+        {
+          "id": "c6-2",
+          "type": "formalize",
+          "sentence": "Il est impossible que Dieu soit trompeur.",
+          "legend": { "t": "Dieu est trompeur" },
+          "answer": "¬◇t",
+          "explanation": "□¬t est équivalent et accepté."
+        },
+        {
+          "id": "c6-3",
+          "type": "mcq",
+          "prompt": "Quelle formule est équivalente à `◇p` ?",
+          "choices": ["¬□¬p", "□¬p", "¬□p", "□p"],
+          "formulas": true,
+          "answer": 0
+        },
+        {
+          "id": "c6-4",
+          "type": "formula",
+          "prompt": "Écris `□p` en utilisant ◇ mais pas □.",
+          "answer": "¬◇¬p",
+          "forbid": ["□"]
+        },
+        {
+          "id": "c6-5",
+          "type": "formalize",
+          "sentence": "Il est contingent que le monde existe.",
+          "legend": { "m": "le monde existe" },
+          "answer": "◇m ∧ ◇¬m"
+        },
+        {
+          "id": "c6-6",
+          "type": "formalize",
+          "sentence": "Nécessairement, si Socrate est un homme, il est mortel.",
+          "legend": { "h": "Socrate est un homme", "m": "Socrate est mortel" },
+          "answer": "□(h → m)",
+          "explanation": "La nécessité porte sur l'implication entière (necessitas consequentiae)."
+        },
+        {
+          "id": "c6-7",
+          "type": "mcq",
+          "prompt": "« Si Socrate est assis, nécessairement il est assis. » Quelle formule correspond (a : Socrate est assis) ?",
+          "choices": ["a → □a", "□(a → a)", "□a → a"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "Ici la nécessité porte sur le conséquent seul (necessitas consequentis) : c'est une thèse forte, et douteuse. □(a → a), elle, est trivialement vraie."
+        },
+        {
+          "id": "c6-8",
+          "type": "formula",
+          "prompt": "Écris « il n'est pas nécessaire que p » sans mettre ¬ devant □ : utilise ◇.",
+          "answer": "◇¬p",
+          "forbid": ["□"]
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Mondes possibles",
+      "cours": [
+        {
+          "title": "Modèles de Kripke",
+          "body": "Un **modèle de Kripke** comprend :\n- des **mondes possibles** (w1, w2…) ;\n- une relation d'**accessibilité** : quels mondes sont « possibles » du point de vue de chaque monde (les flèches) ;\n- pour chaque monde, les lettres qui y sont vraies.\n\nOn évalue une formule **à un monde** :\n- `□A` est vrai en w si A est vrai dans **tous** les mondes que w voit ;\n- `◇A` est vrai en w si A est vrai dans **au moins un** monde que w voit."
+        },
+        {
+          "title": "Les cas limites",
+          "body": "Un monde qui ne voit **aucun** monde rend `□A` vrai (aucun contre-exemple accessible) et `◇A` faux (aucun monde où A est vrai).\n\nLe monde lui-même ne compte pour □ et ◇ que s'il se voit (flèche en boucle)."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c6-9",
+          "type": "kripketruth",
+          "model": { "worlds": ["w1", "w2", "w3"], "access": [["w1", "w2"], ["w1", "w3"]], "valuation": { "w1": [], "w2": ["p"], "w3": ["p", "q"] } },
+          "world": "w1",
+          "sentences": ["□p", "◇q", "□q", "p"]
+        },
+        {
+          "id": "c6-10",
+          "type": "mcq",
+          "prompt": "Le monde w ne voit aucun monde. Que vaut `□p` en w ?",
+          "choices": ["Vrai", "Faux", "Ça dépend de p en w"],
+          "answer": 0,
+          "explanation": "Il n'y a aucun monde accessible où p serait faux : □p est vrai « à vide »."
+        },
+        {
+          "id": "c6-11",
+          "type": "kripketruth",
+          "model": { "worlds": ["w1", "w2"], "access": [["w1", "w1"], ["w1", "w2"], ["w2", "w2"]], "valuation": { "w1": ["p"], "w2": ["q"] } },
+          "world": "w1",
+          "sentences": ["◇p", "□p", "□(p ∨ q)", "◇(p ∧ q)"]
+        },
+        {
+          "id": "c6-12",
+          "type": "kripketruth",
+          "model": { "worlds": ["w1", "w2", "w3"], "access": [["w1", "w2"], ["w2", "w3"], ["w3", "w3"]], "valuation": { "w1": ["p"], "w2": [], "w3": ["p"] } },
+          "world": "w1",
+          "sentences": ["◇p", "◇◇p", "□◇p", "◇□p"]
+        },
+        {
+          "id": "c6-13",
+          "type": "mcq",
+          "prompt": "Pour que `◇p` soit vrai au monde w, il faut…",
+          "choices": ["au moins un monde accessible depuis w où p est vrai", "que p soit vrai en w", "que p soit vrai dans tous les mondes"],
+          "answer": 0
+        },
+        {
+          "id": "c6-14",
+          "type": "kripketruth",
+          "model": { "worlds": ["w1", "w2", "w3"], "access": [["w1", "w2"], ["w2", "w1"], ["w2", "w3"]], "valuation": { "w1": ["p"], "w2": ["p", "q"], "w3": [] } },
+          "world": "w2",
+          "sentences": ["□p", "◇¬p", "□◇q", "◇□⊥"]
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Contre-modèles",
+      "cours": [
+        {
+          "title": "Validité en logique modale",
+          "body": "Une formule modale est **valide** (dans le système de base **K**) si elle est vraie dans tous les mondes de tous les modèles de Kripke.\n\nPour montrer qu'elle ne l'est pas, on construit un **contre-modèle** : un monde w1 où elle est fausse.\n\nLa formule `□(p → q) → (□p → □q)`, appelée **axiome K**, est valide : si p → q et p sont vrais dans tous les mondes accessibles, q l'est aussi."
+        },
+        {
+          "title": "Méthode",
+          "body": "- Pour rendre `□A` **faux** en w1 : il faut un monde accessible où A est faux.\n- Pour rendre `◇A` **faux** en w1 : A doit être faux dans tous les mondes accessibles (ou w1 ne voit rien).\n- Pour rendre `□A` **vrai** : A vrai partout où w1 regarde.\n\nDans l'exercice, coche les flèches dans la grille (la ligne voit la colonne) et choisis où chaque lettre est vraie ; le graphe et les conditions se mettent à jour en direct."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c6-15",
+          "type": "kripkebuild",
+          "prompt": "Montre que `□p → p` n'est pas valide dans K : rends-la fausse en w1.",
+          "true": [],
+          "false": ["□p → p"],
+          "explanation": "Il suffit que p soit faux en w1 et que w1 ne voie pas lui-même (ou ne voie que des mondes où p est vrai)."
+        },
+        {
+          "id": "c6-16",
+          "type": "kripkebuild",
+          "prompt": "Construis un modèle où, en w1, p est possible mais pas nécessaire.",
+          "true": ["◇p"],
+          "false": ["□p"]
+        },
+        {
+          "id": "c6-17",
+          "type": "kripkebuild",
+          "prompt": "Montre que `◇p ∧ ◇q` n'implique pas `◇(p ∧ q)`.",
+          "true": ["◇p ∧ ◇q"],
+          "false": ["◇(p ∧ q)"]
+        },
+        {
+          "id": "c6-18",
+          "type": "mcq",
+          "prompt": "Laquelle de ces formules est valide dans K, sans condition sur l'accessibilité ?",
+          "choices": ["□(p → q) → (□p → □q)", "□p → p", "◇p → □p"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "C'est l'axiome K, valide dans tous les modèles."
+        },
+        {
+          "id": "c6-19",
+          "type": "kripkebuild",
+          "prompt": "Montre que `□(p ∨ q) → (□p ∨ □q)` n'est pas valide.",
+          "true": [],
+          "false": ["□(p ∨ q) → (□p ∨ □q)"],
+          "explanation": "Il faut deux mondes accessibles : l'un où seul p est vrai, l'autre où seul q l'est."
+        },
+        {
+          "id": "c6-20",
+          "type": "kripkebuild",
+          "prompt": "Construis un modèle où, en w1, `□p` est vrai mais `◇p` est faux.",
+          "true": ["□p"],
+          "false": ["◇p"],
+          "explanation": "Seul un monde qui ne voit rien rend □p vrai et ◇p faux."
+        },
+        {
+          "id": "c6-21",
+          "type": "mcq",
+          "prompt": "Pour rendre `□A` faux au monde w1, il faut…",
+          "choices": ["un monde accessible depuis w1 où A est faux", "que A soit faux en w1", "que w1 ne voie aucun monde"],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "Systèmes K, T, S4, S5",
+      "cours": [
+        {
+          "title": "Axiomes et propriétés de l'accessibilité",
+          "body": "En imposant des propriétés à l'accessibilité, on rend valides de nouveaux axiomes :\n- **T** : `□p → p` — relation **réflexive** (chaque monde se voit) ;\n- **D** : `□p → ◇p` — relation **sérielle** (chaque monde voit au moins un monde) ;\n- **4** : `□p → □□p` — relation **transitive** ;\n- **B** : `p → □◇p` — relation **symétrique** ;\n- **5** : `◇p → □◇p` — relation **euclidienne** ; avec la réflexivité, elle devient une relation d'équivalence."
+        },
+        {
+          "title": "Les systèmes usuels",
+          "body": "- **K** : aucune condition (axiome K seul).\n- **T** = K + T : réflexive.\n- **S4** = T + 4 : réflexive et transitive.\n- **S5** = T + 5 : réflexive, symétrique et transitive (tous les mondes d'un groupe se voient).\n\nChaque système contient le précédent : tout ce qui est valide dans K l'est dans T, tout ce qui est valide dans T l'est dans S4, et S4 est contenu dans S5. Pour la nécessité « métaphysique », on retient souvent S5 ; pour la nécessité morale (le devoir), plutôt D : ce qui est obligatoire n'est pas forcément réalisé."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c6-22",
+          "type": "mcq",
+          "prompt": "Quelle propriété de l'accessibilité rend valide `□p → p` ?",
+          "choices": ["La réflexivité", "La symétrie", "La transitivité"],
+          "answer": 0
+        },
+        {
+          "id": "c6-23",
+          "type": "mcq",
+          "prompt": "Quel axiome correspond à la transitivité ?",
+          "choices": ["□p → □□p", "p → □◇p", "□p → ◇p"],
+          "formulas": true,
+          "answer": 0
+        },
+        {
+          "id": "c6-24",
+          "type": "kripkebuild",
+          "prompt": "Montre que `□p → □□p` n'est pas valide dans T : construis un modèle **réflexif** où elle est fausse en w1.",
+          "system": "T",
+          "true": [],
+          "false": ["□p → □□p"],
+          "explanation": "Il faut une chaîne w1 → w2 → w3 sans flèche directe w1 → w3, avec p faux en w3."
+        },
+        {
+          "id": "c6-25",
+          "type": "mcq",
+          "prompt": "Dans quel système S4 est-il contenu ?",
+          "choices": ["S5", "T", "K"],
+          "answer": 0,
+          "explanation": "K ⊂ T ⊂ S4 ⊂ S5 : tout théorème de S4 est un théorème de S5."
+        },
+        {
+          "id": "c6-26",
+          "type": "kripkebuild",
+          "prompt": "Montre que `◇p → □◇p` (axiome 5) n'est pas valide dans S4 : modèle réflexif et transitif où elle est fausse en w1.",
+          "system": "S4",
+          "true": [],
+          "false": ["◇p → □◇p"]
+        },
+        {
+          "id": "c6-27",
+          "type": "mcq",
+          "prompt": "La logique déontique (O = « il est obligatoire que ») rejette `Op → p`. Quelle propriété ne faut-il donc **pas** imposer ?",
+          "choices": ["La réflexivité", "La sérialité", "Aucune"],
+          "answer": 0,
+          "explanation": "Ce qui est obligatoire n'est pas toujours fait : on garde la sérialité (D : Op → ◇p, « devoir implique pouvoir ») mais pas la réflexivité."
+        },
+        {
+          "id": "c6-28",
+          "type": "kripkebuild",
+          "prompt": "Montre que `p → □◇p` (axiome B) n'est pas valide dans S4.",
+          "system": "S4",
+          "true": [],
+          "false": ["p → □◇p"]
+        }
+      ]
+    }
+  ],
+  "test": {
+    "size": 9,
+    "exercises": [
+      {
+        "id": "c6-t1",
+        "type": "kripketruth",
+        "model": { "worlds": ["w1", "w2", "w3"], "access": [["w1", "w1"], ["w1", "w2"], ["w2", "w3"], ["w3", "w3"]], "valuation": { "w1": ["p"], "w2": ["p", "q"], "w3": ["q"] } },
+        "world": "w1",
+        "sentences": ["□p", "◇◇¬p", "□◇q", "□□p"]
+      },
+      {
+        "id": "c6-t2",
+        "type": "kripkebuild",
+        "prompt": "Construis un modèle **réflexif** où, en w1, `◇p` est vrai et `◇□p` est faux.",
+        "system": "T",
+        "true": ["◇p"],
+        "false": ["◇□p"]
+      }
+    ]
+  }
+}

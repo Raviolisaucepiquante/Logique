@@ -1,0 +1,332 @@
+{
+  "id": "ch4",
+  "title": "Logique des prédicats",
+  "summary": "Noms, prédicats, quantificateurs : formaliser « tous », « certains », « aucun ».",
+  "symbols": ["¬", "∧", "∨", "→", "↔", "∀", "∃", "(", ")", "x", "y", "z"],
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Noms et prédicats",
+      "cours": [
+        {
+          "title": "Au-delà des propositions",
+          "body": "« Tous les hommes sont mortels ; Socrate est un homme ; donc Socrate est mortel. » En logique propositionnelle, ces trois phrases deviennent `p`, `q`, `r` : la validité disparaît. Il faut regarder **à l'intérieur** des phrases.\n\nLa logique des prédicats distingue :\n- les **noms** (constantes), qui désignent un objet : `a`, `b`, `s`… ;\n- les **prédicats**, qui disent quelque chose d'un objet : `Hx` pour « x est un homme ».",
+          "examples": [
+            { "text": "Socrate est un homme.", "formula": "Hs", "note": "H : « x est un homme » ; s : Socrate. Le prédicat s'écrit en majuscule, le nom collé derrière." }
+          ]
+        },
+        {
+          "title": "Relations",
+          "body": "Un prédicat peut avoir plusieurs places : `Axy` pour « x aime y ». L'ordre compte : `Ajm` (Jean aime Marie) n'est pas `Amj` (Marie aime Jean).\n\nLes énoncés atomiques se combinent ensuite avec les connecteurs déjà connus.",
+          "examples": [
+            { "text": "Jean aime Marie mais Marie n'aime pas Jean.", "formula": "Ajm ∧ ¬Amj" }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c4-1",
+          "type": "formalize",
+          "sentence": "Socrate est un philosophe.",
+          "legend": { "Px": "x est un philosophe", "s": "Socrate" },
+          "answer": "Ps"
+        },
+        {
+          "id": "c4-2",
+          "type": "formalize",
+          "sentence": "Platon n'est pas un sophiste.",
+          "legend": { "Sx": "x est un sophiste", "b": "Platon" },
+          "answer": "¬Sb"
+        },
+        {
+          "id": "c4-3",
+          "type": "mcq",
+          "prompt": "Avec `Axy` : « x admire y », j : Jean, m : Marie, que dit `Amj` ?",
+          "choices": ["Marie admire Jean.", "Jean admire Marie.", "Jean et Marie s'admirent."],
+          "answer": 0,
+          "explanation": "Le premier argument est celui qui admire, le second celui qui est admiré."
+        },
+        {
+          "id": "c4-4",
+          "type": "formalize",
+          "sentence": "Jean admire Marie.",
+          "legend": { "Axy": "x admire y", "j": "Jean", "m": "Marie" },
+          "answer": "Ajm"
+        },
+        {
+          "id": "c4-5",
+          "type": "formalize",
+          "sentence": "Si Socrate est un philosophe, alors Socrate est sage.",
+          "legend": { "Px": "x est un philosophe", "Wx": "x est sage", "s": "Socrate" },
+          "answer": "Ps → Ws"
+        },
+        {
+          "id": "c4-6",
+          "type": "formalize",
+          "sentence": "Jean et Marie s'admirent l'un l'autre.",
+          "legend": { "Axy": "x admire y", "j": "Jean", "m": "Marie" },
+          "answer": "Ajm ∧ Amj"
+        },
+        {
+          "id": "c4-7",
+          "type": "mcq",
+          "prompt": "Dans `Ps`, que désigne `s` ?",
+          "choices": ["Un objet (un nom)", "Une propriété", "Une phrase entière"],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Les quantificateurs",
+      "cours": [
+        {
+          "title": "∀ et ∃",
+          "body": "- `∀x Fx` : « pour tout x, x est F », « tout est F ».\n- `∃x Fx` : « il existe au moins un x tel que x est F », « quelque chose est F ».\n\nLes **variables** (`x`, `y`, `z`) ne désignent pas un objet précis : elles marquent les places sur lesquelles porte le quantificateur.\n\nLe quantificateur porte sur ce qui suit **immédiatement** : pour qu'il porte sur une formule complexe, il faut des parenthèses, comme dans `∀x(Fx → Gx)`."
+        },
+        {
+          "title": "Négation et quantificateurs",
+          "body": "- « Rien n'est F » : `¬∃x Fx`, ou de façon équivalente `∀x ¬Fx`.\n- « Tout n'est pas F », « pas tout est F » : `¬∀x Fx`, équivalent à `∃x ¬Fx`.\n\nNier « tout » donne « au moins un ne… pas » ; nier « il existe » donne « aucun ».",
+          "examples": [
+            { "text": "Personne n'est parfait.", "formula": "¬∃x Px", "note": "ou ∀x¬Px" }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c4-8",
+          "type": "formalize",
+          "sentence": "Tout est matériel.",
+          "legend": { "Mx": "x est matériel" },
+          "answer": "∀x Mx"
+        },
+        {
+          "id": "c4-9",
+          "type": "formalize",
+          "sentence": "Quelque chose est éternel.",
+          "legend": { "Ex": "x est éternel" },
+          "answer": "∃x Ex"
+        },
+        {
+          "id": "c4-10",
+          "type": "formalize",
+          "sentence": "Rien n'est parfait.",
+          "legend": { "Px": "x est parfait" },
+          "answer": "¬∃x Px",
+          "explanation": "¬∃x Px et ∀x ¬Px sont équivalentes : les deux sont acceptées."
+        },
+        {
+          "id": "c4-11",
+          "type": "mcq",
+          "prompt": "Quelle formule est équivalente à `¬∀x Fx` ?",
+          "choices": ["∃x¬Fx", "∀x¬Fx", "¬∃xFx"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "Si tout n'est pas F, c'est qu'au moins une chose n'est pas F."
+        },
+        {
+          "id": "c4-12",
+          "type": "formalize",
+          "sentence": "Tout n'est pas matériel.",
+          "legend": { "Mx": "x est matériel" },
+          "answer": "¬∀x Mx",
+          "explanation": "« Tout n'est pas matériel » signifie : il y a au moins une chose non matérielle."
+        },
+        {
+          "id": "c4-13",
+          "type": "formula",
+          "prompt": "Réécris `¬∃x Fx` sans mettre ¬ devant le quantificateur.",
+          "answer": "∀x¬Fx",
+          "negationOnAtoms": true
+        },
+        {
+          "id": "c4-14",
+          "type": "formalize",
+          "sentence": "Si quelque chose est éternel, alors tout est ordonné.",
+          "legend": { "Ex": "x est éternel", "Ox": "x est ordonné" },
+          "answer": "∃x Ex → ∀x Ox"
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Tous, certains, aucun",
+      "cours": [
+        {
+          "title": "Les quatre formes catégoriques",
+          "body": "- « Tous les H sont M » : `∀x(Hx → Mx)`\n- « Aucun H n'est M » : `∀x(Hx → ¬Mx)`\n- « Certains H sont M » : `∃x(Hx ∧ Mx)`\n- « Certains H ne sont pas M » : `∃x(Hx ∧ ¬Mx)`\n\nRègle pratique : **∀ va avec →**, **∃ va avec ∧**.",
+          "examples": [
+            { "text": "Tous les hommes sont mortels.", "formula": "∀x(Hx → Mx)" },
+            { "text": "Certains hommes sont philosophes.", "formula": "∃x(Hx ∧ Px)" }
+          ]
+        },
+        {
+          "title": "Les pièges",
+          "body": "- `∀x(Hx ∧ Mx)` dit que **tout** est homme et mortel : trop fort.\n- `∃x(Hx → Mx)` est vrai dès qu'il existe une chose qui n'est pas un homme : trop faible.\n- « **Seuls** les H sont M » : `∀x(Mx → Hx)` (si quelque chose est M, c'est un H).\n- « Les H sont M » au sens général se lit en général comme « tous les H »."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c4-15",
+          "type": "formalize",
+          "sentence": "Tous les hommes sont mortels.",
+          "legend": { "Hx": "x est un homme", "Mx": "x est mortel" },
+          "answer": "∀x(Hx → Mx)"
+        },
+        {
+          "id": "c4-16",
+          "type": "formalize",
+          "sentence": "Certains philosophes sont grecs.",
+          "legend": { "Px": "x est un philosophe", "Gx": "x est grec" },
+          "answer": "∃x(Px ∧ Gx)"
+        },
+        {
+          "id": "c4-17",
+          "type": "formalize",
+          "sentence": "Aucun sophiste n'est sage.",
+          "legend": { "Sx": "x est un sophiste", "Wx": "x est sage" },
+          "answer": "∀x(Sx → ¬Wx)",
+          "explanation": "¬∃x(Sx ∧ Wx) est équivalent et accepté."
+        },
+        {
+          "id": "c4-18",
+          "type": "formalize",
+          "sentence": "Certains hommes ne sont pas philosophes.",
+          "legend": { "Hx": "x est un homme", "Px": "x est un philosophe" },
+          "answer": "∃x(Hx ∧ ¬Px)"
+        },
+        {
+          "id": "c4-19",
+          "type": "mcq",
+          "prompt": "Pourquoi `∃x(Hx → Mx)` ne traduit-il pas « certains hommes sont mortels » ?",
+          "choices": ["Il est vrai dès qu'existe une chose qui n'est pas un homme.", "Il dit que tout est homme.", "Il n'y a aucune différence."],
+          "answer": 0,
+          "explanation": "Une implication à antécédent faux est vraie : n'importe quelle pierre rend Hx → Mx vrai."
+        },
+        {
+          "id": "c4-20",
+          "type": "formalize",
+          "sentence": "Seuls les citoyens votent.",
+          "legend": { "Cx": "x est un citoyen", "Vx": "x vote" },
+          "answer": "∀x(Vx → Cx)",
+          "explanation": "« Seuls les C votent » : si quelqu'un vote, c'est un citoyen."
+        },
+        {
+          "id": "c4-21",
+          "type": "formalize",
+          "sentence": "Tous les philosophes grecs sont sages.",
+          "legend": { "Px": "x est un philosophe", "Gx": "x est grec", "Wx": "x est sage" },
+          "answer": "∀x((Px ∧ Gx) → Wx)"
+        },
+        {
+          "id": "c4-22",
+          "type": "mcq",
+          "prompt": "Quelle formule dit « Tous les H sont M » ?",
+          "choices": ["∀x(Hx → Mx)", "∀x(Hx ∧ Mx)", "∀xHx → ∀xMx"],
+          "formulas": true,
+          "answer": 0,
+          "explanation": "∀x(Hx ∧ Mx) dit que tout est H ; ∀xHx → ∀xMx ne dit rien si tout n'est pas H."
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "Portée et relations",
+      "cours": [
+        {
+          "title": "Variables libres et liées",
+          "body": "Une variable est **liée** quand elle est dans la portée d'un quantificateur sur cette variable ; sinon elle est **libre**. Dans `∀x Rxy`, `x` est liée et `y` est libre.\n\nUne formule sans variable libre est un **énoncé** : elle est vraie ou fausse. `Fx` seul n'est ni vrai ni faux (quel x ?).\n\nLa **portée** d'un quantificateur est la formule sur laquelle il porte : dans `∀x Fx → Gx`, la portée de ∀x est seulement `Fx`, et le `x` de `Gx` est libre."
+        },
+        {
+          "title": "Plusieurs quantificateurs",
+          "body": "L'ordre des quantificateurs différents compte :\n- `∀x∃y Axy` : « tout le monde aime quelqu'un » (chacun peut aimer une personne différente) ;\n- `∃y∀x Axy` : « quelqu'un est aimé de tous » (une même personne), beaucoup plus fort.\n\nDeux quantificateurs de même sorte peuvent s'échanger : `∀x∀y Rxy` équivaut à `∀y∀x Rxy`.",
+          "examples": [
+            { "text": "Tout le monde aime quelqu'un.", "formula": "∀x∃y Axy" },
+            { "text": "Quelqu'un aime tout le monde.", "formula": "∃x∀y Axy" }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c4-23",
+          "type": "mcq",
+          "prompt": "Dans `∀x(Fx → Rxy)`, quelle variable est libre ?",
+          "choices": ["y", "x", "Aucune", "x et y"],
+          "answer": 0
+        },
+        {
+          "id": "c4-24",
+          "type": "mcq",
+          "prompt": "Dans `∀x Fx → Gx`, sur quoi porte ∀x ?",
+          "choices": ["Seulement sur `Fx`", "Sur `Fx → Gx`", "Seulement sur `Gx`"],
+          "answer": 0,
+          "explanation": "Sans parenthèses, le quantificateur porte sur la plus petite formule qui suit."
+        },
+        {
+          "id": "c4-25",
+          "type": "formalize",
+          "sentence": "Tout le monde aime quelqu'un.",
+          "legend": { "Axy": "x aime y" },
+          "answer": "∀x∃y Axy"
+        },
+        {
+          "id": "c4-26",
+          "type": "formalize",
+          "sentence": "Quelqu'un est aimé de tout le monde.",
+          "legend": { "Axy": "x aime y" },
+          "answer": "∃y∀x Axy"
+        },
+        {
+          "id": "c4-27",
+          "type": "formalize",
+          "sentence": "Marie aime tout le monde.",
+          "legend": { "Axy": "x aime y", "m": "Marie" },
+          "answer": "∀x Amx"
+        },
+        {
+          "id": "c4-28",
+          "type": "formalize",
+          "sentence": "Personne n'aime Jean.",
+          "legend": { "Axy": "x aime y", "j": "Jean" },
+          "answer": "¬∃x Axj"
+        },
+        {
+          "id": "c4-29",
+          "type": "mcq",
+          "prompt": "Laquelle de ces formules implique les autres ?",
+          "choices": ["∃y∀x Axy", "∀x∃y Axy", "Aucune n'implique l'autre"],
+          "formulas": false,
+          "answer": 0,
+          "explanation": "Si une même personne est aimée de tous, alors chacun aime quelqu'un. L'inverse ne vaut pas."
+        },
+        {
+          "id": "c4-30",
+          "type": "formalize",
+          "sentence": "Tout philosophe admire quelque philosophe.",
+          "legend": { "Px": "x est un philosophe", "Axy": "x admire y" },
+          "answer": "∀x(Px → ∃y(Py ∧ Axy))"
+        }
+      ]
+    }
+  ],
+  "test": {
+    "size": 10,
+    "exercises": [
+      {
+        "id": "c4-t1",
+        "type": "formalize",
+        "sentence": "Aucun philosophe n'admire un sophiste.",
+        "legend": { "Px": "x est un philosophe", "Sx": "x est un sophiste", "Axy": "x admire y" },
+        "answer": "∀x(Px → ¬∃y(Sy ∧ Axy))",
+        "explanation": "Équivalent : ¬∃x∃y(Px ∧ Sy ∧ Axy)."
+      },
+      {
+        "id": "c4-t2",
+        "type": "formalize",
+        "sentence": "Seuls les sages sont heureux.",
+        "legend": { "Wx": "x est sage", "Hx": "x est heureux" },
+        "answer": "∀x(Hx → Wx)"
+      }
+    ]
+  }
+}

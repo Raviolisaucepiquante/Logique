@@ -1,0 +1,147 @@
+{
+  "id": "ch0",
+  "title": "Qu'est-ce qu'un argument ?",
+  "summary": "Prémisses, conclusion, validité : ce que la logique étudie.",
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Prémisses et conclusion",
+      "cours": [
+        {
+          "title": "Un argument",
+          "body": "En logique, un **argument** est une suite de phrases : les **prémisses**, puis une **conclusion** que les prémisses sont censées justifier.\n\nDes mots comme *donc*, *par conséquent*, *ainsi* annoncent la conclusion. Des mots comme *car*, *puisque*, *étant donné que* annoncent une prémisse.",
+          "examples": [
+            { "text": "Il pleut. S'il pleut, la route est mouillée. Donc la route est mouillée.", "note": "Deux prémisses, puis la conclusion après « donc »." },
+            { "text": "Socrate est mortel, car tous les hommes sont mortels et Socrate est un homme.", "note": "Ici la conclusion vient en premier ; « car » introduit les prémisses." }
+          ]
+        },
+        {
+          "title": "Seules les phrases déclaratives comptent",
+          "body": "Prémisses et conclusion doivent pouvoir être **vraies ou fausses**. Une question (« Quelle heure est-il ? »), un ordre (« Ferme la porte ! ») ou une exclamation ne peuvent pas jouer ce rôle."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c0-1",
+          "type": "mcq",
+          "prompt": "« Il fait froid, puisque le lac a gelé. » Quelle est la conclusion ?",
+          "choices": ["Il fait froid.", "Le lac a gelé.", "Il n'y a pas de conclusion."],
+          "answer": 0,
+          "explanation": "« Puisque » introduit la prémisse (le lac a gelé) ; la conclusion est ce qu'elle justifie."
+        },
+        {
+          "id": "c0-2",
+          "type": "mcq",
+          "prompt": "Laquelle de ces phrases peut servir de prémisse ?",
+          "choices": ["Paris est la capitale de l'Italie.", "Viens-tu ce soir ?", "Range ta chambre !", "Quelle belle journée !"],
+          "answer": 0,
+          "explanation": "Elle est fausse, mais elle est vraie ou fausse : c'est tout ce qu'on demande à une prémisse."
+        },
+        {
+          "id": "c0-3",
+          "type": "mcq",
+          "prompt": "Quel mot annonce en général une **conclusion** ?",
+          "choices": ["donc", "car", "puisque", "parce que"],
+          "answer": 0
+        },
+        {
+          "id": "c0-4",
+          "type": "mcq",
+          "prompt": "« Tous les chats miaulent et Félix est un chat. Par conséquent, Félix miaule. » Combien de prémisses ?",
+          "choices": ["Une", "Deux", "Trois"],
+          "answer": 1,
+          "explanation": "« Tous les chats miaulent » et « Félix est un chat » ; « Félix miaule » est la conclusion."
+        },
+        {
+          "id": "c0-5",
+          "type": "mcq",
+          "prompt": "« Ferme la fenêtre, il fait froid. » Est-ce un argument au sens logique ?",
+          "choices": ["Non : « Ferme la fenêtre » n'est ni vrai ni faux.", "Oui : « il fait froid » est la conclusion.", "Oui : il y a deux phrases."],
+          "answer": 0,
+          "explanation": "Un ordre ne peut pas être une conclusion : il n'a pas de valeur de vérité."
+        },
+        {
+          "id": "c0-6",
+          "type": "mcq",
+          "prompt": "« Le train est en retard, étant donné que la voie est bloquée. » Quelle est la prémisse ?",
+          "choices": ["La voie est bloquée.", "Le train est en retard."],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Validité et vérité",
+      "cours": [
+        {
+          "title": "Un argument valide",
+          "body": "Un argument est **valide** s'il est *impossible* que toutes ses prémisses soient vraies et sa conclusion fausse.\n\nLa validité ne dit rien de la vérité des prémisses : elle garantit seulement que *si* les prémisses sont vraies, la conclusion l'est aussi.",
+          "examples": [
+            { "text": "Tous les poissons volent. Le saumon est un poisson. Donc le saumon vole.", "note": "Valide, alors que la première prémisse est fausse." },
+            { "text": "Certains oiseaux nagent. Donc Paris est en France.", "note": "Prémisse et conclusion vraies, mais invalide : la conclusion ne découle pas de la prémisse." }
+          ]
+        },
+        {
+          "title": "Valide et correct ; la forme",
+          "body": "Un argument **correct** (on dit aussi *bien fondé*) est valide **et** a des prémisses vraies. Sa conclusion est alors forcément vraie.\n\nLa validité dépend de la **forme** de l'argument, pas de son sujet. « S'il pleut, la route est mouillée ; il pleut ; donc la route est mouillée » a la même forme que « Si p alors q ; p ; donc q ». C'est pourquoi on remplacera bientôt les phrases par des lettres."
+        }
+      ],
+      "exercises": [
+        {
+          "id": "c0-7",
+          "type": "mcq",
+          "prompt": "Un argument valide peut-il avoir une conclusion fausse ?",
+          "choices": ["Oui, si au moins une prémisse est fausse.", "Non, jamais.", "Oui, même si toutes les prémisses sont vraies."],
+          "answer": 0,
+          "explanation": "La validité interdit seulement le cas « prémisses toutes vraies, conclusion fausse »."
+        },
+        {
+          "id": "c0-8",
+          "type": "mcq",
+          "prompt": "« Tous les chiens sont des chats. Tous les chats aboient. Donc tous les chiens aboient. » Cet argument est…",
+          "choices": ["valide mais non correct", "valide et correct", "invalide"],
+          "answer": 0,
+          "explanation": "Si les prémisses étaient vraies, la conclusion le serait forcément : il est valide. Mais ses prémisses sont fausses."
+        },
+        {
+          "id": "c0-9",
+          "type": "mcq",
+          "prompt": "« Si je suis à Lyon, je suis en France. Je suis en France. Donc je suis à Lyon. » Cet argument est…",
+          "choices": ["invalide", "valide"],
+          "answer": 0,
+          "explanation": "On peut être en France sans être à Lyon (à Brest, par exemple) : prémisses vraies, conclusion fausse. C'est le sophisme de l'affirmation du conséquent."
+        },
+        {
+          "id": "c0-10",
+          "type": "mcq",
+          "prompt": "Quelle situation est **impossible** pour un argument valide ?",
+          "choices": ["Prémisses vraies, conclusion fausse", "Prémisses fausses, conclusion vraie", "Prémisses fausses, conclusion fausse", "Prémisses vraies, conclusion vraie"],
+          "answer": 0
+        },
+        {
+          "id": "c0-11",
+          "type": "mcq",
+          "prompt": "Un argument correct (bien fondé) est un argument…",
+          "choices": ["valide dont les prémisses sont vraies", "dont la conclusion est vraie", "valide, quelles que soient ses prémisses"],
+          "answer": 0
+        },
+        {
+          "id": "c0-12",
+          "type": "mcq",
+          "prompt": "« Si le moteur tourne, il y a de l'essence. Le moteur tourne. Donc il y a de l'essence. » Quelle est sa forme ?",
+          "choices": ["Si p alors q ; p ; donc q", "Si p alors q ; q ; donc p", "p ou q ; non p ; donc q"],
+          "answer": 0,
+          "explanation": "C'est le *modus ponens*, la forme valide la plus utilisée."
+        },
+        {
+          "id": "c0-13",
+          "type": "mcq",
+          "prompt": "La validité d'un argument dépend…",
+          "choices": ["de sa forme", "de la vérité de ses prémisses", "du sujet dont il parle"],
+          "answer": 0
+        }
+      ]
+    }
+  ],
+  "test": { "size": 8 }
+}
