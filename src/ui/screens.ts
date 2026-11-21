@@ -9,27 +9,35 @@ import type { Chapter, Exercise, Module } from '../core/types';
 import { pretty } from '../logic/formula';
 import { formula, h, icon } from './dom';
 import { courseCard } from './player';
+import { installState, offlineReady, promptInstall } from './pwa';
 
 export interface Nav {
   go: (hash: string) => void;
 }
 
-function topBar(catalog: Catalog, active: 'path' | 'review' | 'settings', nav: Nav): HTMLElement {
-  const due = dueKeys(catalog).length;
-  const link = (id: typeof active, label: string, hash: string, badge?: number) => h('a', {
-    href: hash,
-    class: `nav-link ${active === id ? 'active' : ''}`,
-    onclick: (e: Event) => { e.preventDefault(); nav.go(hash); },
-  }, label, badge ? h('span', { class: 'badge' }, badge) : null);
+type Tab = 'path' | 'review' | 'settings';
+const TABS: { id: Tab; label: string; hash: string; icon: string }[] = [
+  { id: 'path', label: 'Parcours', hash: '#/', icon: 'map' },
+  { id: 'review', label: 'Révision', hash: '#/revision', icon: 'refresh' },
+  { id: 'settings', label: 'Réglages', hash: '#/reglages', icon: 'gear' },
+];
 
+/** Liens de navigation : en haut sur grand écran, en barre d'onglets en bas sur téléphone. */
+function navLinks(catalog: Catalog, active: Tab, nav: Nav, cls: string): HTMLElement {
+  const due = dueKeys(catalog).length;
+  return h('nav', { class: cls, 'aria-label': 'Navigation principale' }, ...TABS.map((t) => h('a', {
+    href: t.hash,
+    class: `nav-link ${active === t.id ? 'active' : ''}`,
+    'aria-current': active === t.id ? 'page' : null,
+    onclick: (e: Event) => { e.preventDefault(); nav.go(t.hash); },
+  }, icon(t.icon, 'nav-icon'), h('span', { class: 'nav-label' }, t.label), t.id === 'review' && due ? h('span', { class: 'badge' }, due) : null)));
+}
+
+function topBar(catalog: Catalog, active: Tab, nav: Nav): HTMLElement {
   return h('header', { class: 'topbar' },
     h('div', { class: 'topbar-inner' },
       h('a', { href: '#/', class: 'brand', onclick: (e: Event) => { e.preventDefault(); nav.go('#/'); } }, 'Logique'),
-      h('nav', { class: 'nav' },
-        link('path', 'Parcours', '#/'),
-        link('review', 'Révision', '#/revision', due),
-        link('settings', 'Réglages', '#/reglages'),
-      ),
+      navLinks(catalog, active, nav, 'nav'),
       h('div', { class: 'meta', title: 'Série de jours · points d\'expérience' },
         h('span', { class: `streak ${currentStreak() ? 'on' : ''}` }, icon('flame'), currentStreak()),
         h('span', { class: 'xp' }, `${state.xp} XP`),
@@ -38,8 +46,50 @@ function topBar(catalog: Catalog, active: 'path' | 'review' | 'settings', nav: N
   );
 }
 
-function page(catalog: Catalog, active: 'path' | 'review' | 'settings', nav: Nav, ...content: (Node | null)[]): HTMLElement {
-  return h('div', { class: 'app' }, topBar(catalog, active, nav), h('main', { class: 'page' }, ...content));
+function page(catalog: Catalog, active: Tab, nav: Nav, ...content: (Node | null)[]): HTMLElement {
+  return pageWithAside(catalog, active, nav, null, ...content);
+}
+
+/** Page avec une colonne latérale, affichée seulement sur grand écran. */
+function pageWithAside(catalog: Catalog, active: Tab, nav: Nav, aside: HTMLElement | null, ...content: (Node | null)[]): HTMLElement {
+  return h('div', { class: `app ${aside ? 'has-aside' : ''}` },
+    topBar(catalog, active, nav),
+    h('div', { class: 'layout' },
+      h('main', { class: 'page' }, ...content),
+      aside ? h('aside', { class: 'aside' }, aside) : null,
+    ),
+    navLinks(catalog, active, nav, 'tabbar'),
+  );
+}
+
+function summaryAside(catalog: Catalog, nav: Nav): HTMLElement {
+  const due = dueKeys(catalog).length;
+  const blocks: HTMLElement[] = [];
+  blocks.push(h('section', { class: 'panel aside-card' },
+    h('h2', null, "Aujourd'hui"),
+    h('div', { class: 'aside-stats' },
+      h('div', null, h('strong', null, currentStreak()), h('span', null, 'jours de série')),
+      h('div', null, h('strong', null, state.xp), h('span', null, 'XP')),
+      h('div', null, h('strong', null, due), h('span', null, 'à revoir')),
+    ),
+    due ? h('button', { type: 'button', class: 'btn btn-primary btn-block', onclick: () => nav.go('#/session/revision') }, 'Réviser maintenant') : null,
+  ));
+  for (const m of catalog.modules) {
+    const total = m.chapters.reduce((n, c) => n + c.lessons.length, 0);
+    const done = m.chapters.reduce((n, c) => n + c.lessons.filter((l) => isLessonCompleted(m, c, l.id)).length, 0);
+    blocks.push(h('section', { class: 'panel aside-card' },
+      h('h2', null, m.title),
+      h('div', { class: 'aside-progress' }, h('div', { class: 'aside-bar', style: `width:${Math.round((done / total) * 100)}%` })),
+      h('p', { class: 'muted' }, `${done} leçon${done > 1 ? 's' : ''} sur ${total}`),
+      h('ol', { class: 'aside-chapters' }, ...m.chapters.map((c, ci) => {
+        const mastered = isChapterMastered(m, c);
+        const open = isChapterUnlocked(m, ci);
+        return h('li', { class: mastered ? 'mastered' : open ? 'open' : 'locked' },
+          icon(mastered ? 'star' : open ? 'play' : 'lock'), h('span', null, c.title));
+      })),
+    ));
+  }
+  return h('div', null, ...blocks);
 }
 
 // --- Chemin --------------------------------------------------------------------
@@ -100,7 +150,7 @@ function chapterBlock(m: Module, c: Chapter, ci: number, nav: Nav): HTMLElement 
 
 export function pathScreen(catalog: Catalog, nav: Nav): HTMLElement {
   const due = dueKeys(catalog).length;
-  return page(catalog, 'path', nav,
+  return pageWithAside(catalog, 'path', nav, summaryAside(catalog, nav),
     due ? h('a', {
       href: '#/revision',
       class: 'review-callout',
@@ -208,6 +258,27 @@ function toggle(label: string, desc: string, value: boolean, onChange: (v: boole
   return h('label', { class: 'setting' }, h('span', null, h('strong', null, label), h('small', null, desc)), input);
 }
 
+/** Installation sur l'appareil et mode hors ligne. */
+function appPanel(): HTMLElement {
+  const st = installState();
+  const install = st === 'installed'
+    ? h('p', null, icon('check'), " L'application est installée sur cet appareil.")
+    : st === 'available'
+      ? h('button', { type: 'button', class: 'btn btn-primary', onclick: () => { void promptInstall(); } }, icon('download'), "Installer l'application")
+      : st === 'ios'
+        ? h('p', null, "Sur iPhone ou iPad : dans Safari, touche le bouton Partager, puis « Sur l'écran d'accueil ».")
+        : h('p', { class: 'muted' }, "Pour l'installer, ouvre l'application depuis son adresse web (https) dans Chrome, Edge ou Safari, puis choisis « Installer » ou « Ajouter à l'écran d'accueil ».");
+  return h('section', { class: 'panel' },
+    h('h2', null, 'Application'),
+    install,
+    h('p', { class: 'muted' }, offlineReady()
+      ? 'Disponible hors ligne : tout le contenu est enregistré sur cet appareil.'
+      : location.protocol === 'file:'
+        ? "Fichier ouvert depuis le disque : il fonctionne sans réseau, mais l'installation demande la version en ligne."
+        : 'Le mode hors ligne s’active après une première visite en ligne de la version publiée.'),
+  );
+}
+
 export function settingsScreen(catalog: Catalog, nav: Nav, rerender: () => void): HTMLElement {
   const file = h('input', {
     type: 'file',
@@ -226,6 +297,7 @@ export function settingsScreen(catalog: Catalog, nav: Nav, rerender: () => void)
       toggle('Cœurs', 'Cinq cœurs par leçon ; on en perd un à chaque erreur.', state.settings.hearts, (v) => { state.settings.hearts = v; save(); }),
       toggle('Tout débloquer', 'Accéder librement à tous les chapitres et leçons, sans condition de maîtrise.', state.settings.unlockAll, (v) => { state.settings.unlockAll = v; save(); }),
     ),
+    appPanel(),
     h('section', { class: 'panel' },
       h('h2', null, 'Sauvegarde'),
       h('p', { class: 'muted' }, 'La progression est enregistrée dans ce navigateur. Exporte-la pour la transférer ou la garder.'),

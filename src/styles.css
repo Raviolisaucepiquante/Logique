@@ -409,3 +409,142 @@ h3 { font-size: 1rem; font-weight: 600; }
 .kg-val { font-family: var(--font-f); font-style: italic; font-size: 12px; fill: var(--accent); }
 .solution-graph { display: block; }
 .solution-graph .kripke-graph { display: block; max-width: 260px; background: var(--surface); border-radius: 10px; margin-top: 4px; }
+
+/* ==========================================================================
+   Mise en page adaptée à chaque écran
+   - téléphone (< 720 px) : barre d'onglets en bas, contrôles empilés ;
+   - tablette (720–1099 px) : une colonne centrée ;
+   - grand écran (≥ 1100 px) : colonne de résumé à droite du parcours ;
+   - exercices de construction et preuves : deux colonnes dès 960 px.
+   ========================================================================== */
+
+/* Zones sûres (encoche, barre de geste) quand l'app est installée en plein écran. */
+.topbar { padding-top: env(safe-area-inset-top); }
+.player-top { padding-top: max(16px, env(safe-area-inset-top)); }
+.footer-inner { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
+.player-top, .footer-inner, .stage, .topbar-inner, .page { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+
+.btn-block { width: 100%; margin-top: 12px; }
+.layout { max-width: 760px; margin: 0 auto; }
+.aside { display: none; }
+.tabbar { display: none; }
+.nav-icon { display: none; }
+.key-native.on { background: var(--accent-soft); color: var(--accent); }
+
+/* Grand écran : colonne de résumé. */
+@media (min-width: 1100px) {
+  .app.has-aside .topbar-inner { max-width: 1120px; }
+  .app.has-aside .layout { max-width: 1120px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; padding: 0 16px; }
+  .app.has-aside .page { max-width: none; padding-left: 0; padding-right: 0; }
+  .aside { display: block; padding-top: 24px; }
+  .aside > div { position: sticky; top: 76px; }
+}
+.aside-card h2 { font-size: 1rem; }
+.aside-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+.aside-stats div { background: var(--surface-2); border-radius: 10px; padding: 10px 4px; display: flex; flex-direction: column; }
+.aside-stats strong { font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+.aside-stats span { font-size: 0.75rem; color: var(--muted); }
+.aside-progress { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin: 4px 0 6px; }
+.aside-bar { height: 100%; background: var(--ok); border-radius: 99px; }
+.aside-chapters { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; font-size: 0.9rem; }
+.aside-chapters li { display: flex; align-items: center; gap: 8px; }
+.aside-chapters .icon { width: 1em; height: 1em; }
+.aside-chapters .mastered { color: var(--gold); }
+.aside-chapters .mastered span { color: var(--text); }
+.aside-chapters .open { color: var(--accent); }
+.aside-chapters .open span { color: var(--text); }
+.aside-chapters .locked { color: var(--muted); }
+
+/* Exercices riches sur écran large : deux colonnes. */
+@media (min-width: 960px) {
+  .stage:has(.ex-proof, .ex-buildmodel, .ex-kripkebuild) { max-width: 980px; }
+  .ex-buildmodel, .ex-kripkebuild { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 28px; align-items: start; }
+  .ex-buildmodel > .prompt, .ex-kripkebuild > .prompt { grid-column: 1 / -1; }
+  .ex-buildmodel > .bm-status, .ex-kripkebuild > .bm-status, .ex-kripkebuild > .graph-wrap { grid-column: 1; }
+  .ex-buildmodel > .bm-editor { grid-column: 2; grid-row: 2; }
+  .ex-kripkebuild > .bm-editor { grid-column: 2; grid-row: 2 / span 2; }
+  .ex-proof { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 0 28px; align-items: start; }
+  .ex-proof > .prompt, .ex-proof > .sequent { grid-column: 1 / -1; }
+  .ex-proof > .proof { grid-column: 1; grid-row: 3 / span 3; }
+  .ex-proof > .proof-tools, .ex-proof > .keyboard, .ex-proof > .hint { grid-column: 2; }
+  .ex-proof > .proof-tools { display: grid; grid-template-columns: 1fr 1fr; }
+  .ex-proof > .proof-tools .btn { width: 100%; }
+}
+
+/* Téléphone. */
+@media (max-width: 719px) {
+  .topbar-inner { flex-wrap: nowrap; }
+  .nav { display: none; }
+  .meta { margin-left: auto; }
+  .page { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  .tabbar {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line); padding: 6px 8px max(6px, env(safe-area-inset-bottom));
+  }
+  .tabbar .nav-link { flex: 1; flex-direction: column; gap: 2px; padding: 6px 0; font-size: 0.72rem; border-radius: 10px; position: relative; }
+  .tabbar .nav-link.active { color: var(--accent); }
+  .tabbar .nav-icon { display: block; width: 24px; height: 24px; }
+  .tabbar .badge { position: absolute; top: 2px; left: calc(50% + 6px); }
+}
+
+@media (max-width: 560px) {
+  /* Tables de vérité : colonnes compactes, en-têtes sur plusieurs lignes. */
+  .truth th { padding: 8px 6px; font-size: 0.92rem; }
+  .truth th .f { white-space: normal; }
+  .truth th.atom, .truth td.atom { padding: 8px 8px; }
+  .cell { min-width: 44px; height: 42px; }
+
+  /* Preuves : formule sur une ligne, justification dessous, trait de Fitch continu. */
+  .proof:not(.proof-static) .pl {
+    display: grid; grid-template-columns: 22px auto minmax(0, 1fr) 22px;
+    grid-template-areas: "num bars f status" ". bars just just"; column-gap: 6px; row-gap: 4px; padding: 4px 0;
+  }
+  .proof:not(.proof-static) .pl-num { grid-area: num; }
+  .proof:not(.proof-static) .pl-bars { grid-area: bars; }
+  .proof:not(.proof-static) .pl-f { grid-area: f; }
+  .proof:not(.proof-static) .pl-just { grid-area: just; margin-left: 0; }
+  .proof:not(.proof-static) .pl-status { grid-area: status; }
+  .proof:not(.proof-static) .pl.fixed .pl-just { justify-self: start; }
+  .pl-rule { width: 84px; }
+  .pl-cites { width: 96px; }
+  .pl-msg { padding: 0 8px 6px 34px; }
+  .proof-tools { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .proof-tools .btn { width: 100%; padding-left: 4px; padding-right: 4px; }
+
+  /* Exercices de construction : libellés au-dessus des contrôles. */
+  .bm-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .bm-label { min-width: 0; }
+  .bm-status li { flex-wrap: wrap; }
+  .bm-want { flex-basis: 100%; margin-left: 30px; }
+  .kripke-graph { max-width: 300px; }
+  .chip { height: 40px; min-width: 44px; }
+
+  .keys { gap: 6px; }
+  .key { min-width: 44px; height: 46px; flex: 1 0 44px; }
+  .key-wide { margin-left: 0; }
+  .mt-row { font-size: 1.05rem; }
+  .model-card { font-size: 0.95rem; }
+}
+
+/* Écrans tactiles : pas d'effets de survol qui restent « collés » après un appui. */
+@media (hover: none) {
+  .choice:hover:not(:disabled) { border-color: var(--line); }
+  .choice.selected:hover:not(:disabled) { border-color: var(--accent); }
+  .node:not(:disabled):hover { transform: none; }
+  .key:hover:not(:disabled), .cell:hover:not(:disabled), .btn-ghost:hover:not(:disabled) { background: var(--surface); }
+  .cell.bad:hover { background: var(--bad-bg); }
+}
+@media (min-width: 960px) {
+  .player:has(.ex-proof, .ex-buildmodel, .ex-kripkebuild) .footer-inner,
+  .player:has(.ex-proof, .ex-buildmodel, .ex-kripkebuild) .player-top { max-width: 1012px; }
+}
+
+/* Avis de mise à jour de l'application installée. */
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 30;
+  display: flex; align-items: center; gap: 14px; padding: 10px 12px 10px 18px; border-radius: 14px;
+  background: var(--text); color: var(--bg); box-shadow: 0 6px 24px rgb(0 0 0 / 0.2); animation: slideup 0.3s ease both;
+  max-width: calc(100vw - 32px);
+}
+@media (max-width: 719px) { .toast { bottom: calc(84px + env(safe-area-inset-bottom)); } }

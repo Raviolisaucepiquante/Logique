@@ -154,9 +154,9 @@ export const proofView: ExerciseFactory<ProofExercise> = (ex, ctx) => {
 
   const bLine = btn('+ Ligne', 'Ajouter une ligne au même niveau', () => addLine(last()?.depth ?? 0, false));
   const bHyp = btn('+ Hypothèse', 'Ouvrir une sous-preuve avec une hypothèse', () => addLine((last()?.depth ?? 0) + 1, true));
-  const bClose = btn('Fermer la sous-preuve', 'Continuer au niveau inférieur', () => addLine(Math.max(0, last().depth - 1), false));
-  const bSibling = btn('Hypothèse suivante', 'Fermer la sous-preuve et en ouvrir une autre au même niveau (utile pour ∨E, ↔I)', () => addLine(last().depth, true));
-  const bDelete = btn('Supprimer la ligne', 'Supprimer la dernière ligne', () => { rows.pop(); renderRows(); });
+  const bClose = btn('Fermer', 'Fermer la sous-preuve : continuer au niveau inférieur', () => addLine(Math.max(0, last().depth - 1), false));
+  const bSibling = btn('Hyp. suivante', 'Fermer la sous-preuve et en ouvrir une autre au même niveau (utile pour ∨E, ↔I)', () => addLine(last().depth, true));
+  const bDelete = btn('Supprimer', 'Supprimer la dernière ligne', () => { rows.pop(); renderRows(); });
 
   function updateButtons() {
     const d = last()?.depth ?? 0;
@@ -165,7 +165,8 @@ export const proofView: ExerciseFactory<ProofExercise> = (ex, ctx) => {
     bDelete.disabled = editableCount() <= 0;
   }
 
-  const letters = [...new Set([...ex.premises, ex.conclusion].flatMap((f) => keyLetters(undefined, f)))];
+  // En logique des prédicats, on propose aussi des noms nouveaux (utiles pour ∀I et ∃E).
+  const letters = [...new Set([...[...ex.premises, ex.conclusion].flatMap((f) => keyLetters(undefined, f)), ...(firstOrder ? ['a', 'b', 'c'] : [])])];
   const premisesText = ex.premises.length ? ex.premises.join(', ') : '';
 
   const el = h('div', { class: 'ex ex-proof' },

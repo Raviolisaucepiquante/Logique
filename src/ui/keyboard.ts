@@ -29,8 +29,20 @@ function backspace(input: HTMLInputElement): void {
   input.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
+// Sur écran tactile, le clavier natif du téléphone cacherait le clavier de symboles :
+// par défaut on le désactive (inputmode="none"), et une touche permet de le rappeler.
+const isTouch = () => typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
+let nativeKeyboard = false;
+const FORMULA_INPUTS = '.formula-input, .pl-input';
+
+function applyInputMode(input: HTMLInputElement): void {
+  if (isTouch() && !nativeKeyboard) input.setAttribute('inputmode', 'none');
+  else input.removeAttribute('inputmode');
+}
+
 /** Convertit à la volée « -> », « & », « ~ »… en symboles, en conservant la position du curseur. */
 export function liveNormalize(input: HTMLInputElement): void {
+  applyInputMode(input);
   input.addEventListener('input', () => {
     const caret = input.selectionStart ?? input.value.length;
     const before = normalizeInput(input.value.slice(0, caret));
@@ -68,6 +80,23 @@ export function symbolKeyboard(
     h('div', { class: 'keys' },
       ...symbols.map((s) => key(s, (i) => insert(i, s), LABELS[s], 'key-sym')),
       ...letters.map((l) => key(l, (i) => insert(i, l), undefined, 'key-letter')),
+      isTouch() ? h('button', {
+        type: 'button',
+        class: `key key-native ${nativeKeyboard ? 'on' : ''}`,
+        title: 'Clavier du téléphone',
+        'aria-label': 'Afficher ou masquer le clavier du téléphone',
+        'aria-pressed': String(nativeKeyboard),
+        onmousedown: (e: MouseEvent) => e.preventDefault(),
+        onclick: (e: MouseEvent) => {
+          nativeKeyboard = !nativeKeyboard;
+          document.querySelectorAll<HTMLInputElement>(FORMULA_INPUTS).forEach(applyInputMode);
+          document.querySelectorAll('.key-native').forEach((k) => { k.classList.toggle('on', nativeKeyboard); k.setAttribute('aria-pressed', String(nativeKeyboard)); });
+          void e;
+          const input = get();
+          // Le changement d'inputmode ne prend effet qu'au prochain focus.
+          if (input) { input.blur(); setTimeout(() => input.focus(), 30); }
+        },
+      }, icon('keyboard')) : null,
       key(icon('backspace'), backspace, 'Effacer', 'key-wide'),
     ),
   );

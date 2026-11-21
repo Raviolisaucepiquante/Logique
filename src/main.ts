@@ -9,6 +9,7 @@ import { clear, h } from './ui/dom';
 import { DEFAULT_SYMBOLS } from './ui/keyboard';
 import { playSession, type PlayerConfig } from './ui/player';
 import { courseScreen, pathScreen, reviewScreen, settingsScreen, type Nav } from './ui/screens';
+import { initPwa, onPwaChange } from './ui/pwa';
 
 const root = document.getElementById('app')!;
 let catalog: Catalog;
@@ -135,6 +136,12 @@ function render() {
     case 'lecon': return startLesson(a, b, c);
     case 'test': return startTest(a, b);
     case 'session': return startReview(a === 'erreurs' ? 'erreurs' : 'revision');
+    // Développement seulement : #/demo/<module>/<id d'exercice> ouvre un exercice isolé.
+    case 'demo': {
+      const ref = import.meta.env.DEV ? catalog.exercises.get(`${a}/${b}`) : undefined;
+      if (!ref) return nav.go('#/');
+      return play({ mode: 'review', cards: [], items: [{ key: ref.key, exercise: ref.exercise }], hearts: false, onComplete: (s) => ({ success: true, headline: 'Démo', xp: s.xp() }) });
+    }
     case 'cours': {
       const found = findChapter(a, b);
       return found ? show(courseScreen(catalog, found.m, found.c, nav)) : nav.go('#/');
@@ -152,6 +159,8 @@ async function boot() {
     show(h('div', { class: 'page' }, h('p', { class: 'empty' }, `Le contenu n'a pas pu être chargé : ${(e as Error).message}`)));
     return;
   }
+  initPwa();
+  onPwaChange(() => { if (route === '#/reglages') render(); });
   window.addEventListener('hashchange', syncFromLocation);
   window.addEventListener('popstate', syncFromLocation);
   render();

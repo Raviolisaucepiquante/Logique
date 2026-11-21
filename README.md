@@ -14,6 +14,24 @@ npm run standalone  # régénère Logique.html (un seul fichier, sans serveur)
 
 **Sans rien installer** : double-clique sur `Logique.html`. Tout y est intégré (code et contenu) ; la progression est enregistrée dans le navigateur. Après une modification du contenu ou du code, relance `npm run standalone` pour mettre ce fichier à jour.
 
+## Sur téléphone : application installable (PWA)
+
+L'application s'adapte à l'écran : barre d'onglets en bas sur téléphone, colonne de résumé et exercices en deux colonnes sur grand écran. Sur écran tactile, le clavier de symboles remplace le clavier du téléphone (une touche le rappelle au besoin).
+
+Une fois construite (`npm run build`), elle est installable et fonctionne **hors ligne** : un service worker (`dist/sw.js`, généré par `scripts/build-sw.mjs`) met en cache tout le code et tout le contenu. À chaque nouvelle version, l'application propose « Mettre à jour ».
+
+L'installation exige une adresse **https** (ou `localhost`). Le plus simple : GitHub Pages.
+
+1. Crée un dépôt sur GitHub et envoie-y ce projet (`git remote add origin …` puis `git push -u origin main`).
+2. Sur GitHub : *Settings > Pages > Source* : « GitHub Actions ». Le fichier `.github/workflows/deploy.yml` teste, construit et publie l'application à chaque envoi.
+3. Ouvre l'adresse publiée sur ton téléphone :
+   - Android (Chrome) : menu ⋮ > « Installer l'application » (ou le bouton dans *Réglages*) ;
+   - iPhone (Safari) : bouton Partager > « Sur l'écran d'accueil ».
+
+La progression reste enregistrée sur chaque appareil (export/import dans *Réglages* pour la transférer). `Logique.html`, lui, s'ouvre d'un double-clic mais ne s'installe pas.
+
+Pour régénérer les icônes : `npm run icons`.
+
 ## Organisation
 
 ```

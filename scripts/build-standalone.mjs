@@ -22,6 +22,12 @@ for (const mod of index.modules) {
 const safe = (s) => s.replace(/<\/(script)/gi, '<\\/$1');
 
 let html = readFileSync(join(dist, 'index.html'), 'utf8');
+// Le fichier unique ne s'installe pas (pas de serveur) : on retire manifeste et icônes externes,
+// et on intègre la petite icône d'onglet.
+html = html
+  .replace(/\s*<link rel="manifest"[^>]*>/, '')
+  .replace(/\s*<link rel="apple-touch-icon"[^>]*>/, '')
+  .replace(/href="[^"]*favicon-32\.png"/, () => `href="data:image/png;base64,${readFileSync(join(dist, 'icons', 'favicon-32.png')).toString('base64')}"`);
 const assets = readdirSync(join(dist, 'assets'));
 
 for (const css of assets.filter((f) => f.endsWith('.css'))) {

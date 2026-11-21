@@ -45,7 +45,7 @@ export const truthTableView: ExerciseFactory<TruthTableExercise> = (ex, ctx) => 
 
   const el = h('div', { class: 'ex ex-truthtable' },
     h('h2', { class: 'prompt' }, inlineMarkup(ex.prompt ?? `Complète la table de vérité de \`${ex.formula}\`.`)),
-    h('p', { class: 'hint' }, 'Clique sur une case pour choisir V ou F.'),
+    h('p', { class: 'hint' }, 'Touche une case pour alterner entre V et F.'),
     h('div', { class: 'table-wrap' }, h('table', { class: 'truth' }, thead, tbody)),
   );
 
