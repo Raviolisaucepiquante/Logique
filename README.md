@@ -32,6 +32,12 @@ La progression reste enregistrée sur chaque appareil (export/import dans *Régl
 
 Pour régénérer les icônes : `npm run icons`.
 
+## Synchronisation entre appareils (optionnelle)
+
+Connexion par Google ou par lien e-mail, sauvegarde en ligne avec Supabase, fusion intelligente des progressions (meilleur résultat par exercice, XP additionnés par appareil, jours de série réunis). Hors ligne, tout reste enregistré sur l'appareil et part dès que le réseau revient. Sans compte, rien ne change.
+
+Mise en place pas à pas : [docs/SUPABASE.md](docs/SUPABASE.md). Aucune clé dans le dépôt : `.env.local` en local (modèle : `.env.example`), secrets GitHub pour la version publiée.
+
 ## Organisation
 
 ```

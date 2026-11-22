@@ -10,6 +10,7 @@ import { DEFAULT_SYMBOLS } from './ui/keyboard';
 import { playSession, type PlayerConfig } from './ui/player';
 import { courseScreen, pathScreen, reviewScreen, settingsScreen, type Nav } from './ui/screens';
 import { initPwa, onPwaChange } from './ui/pwa';
+import { initSync, onRemoteData, onSyncChange } from './core/sync';
 
 const root = document.getElementById('app')!;
 let catalog: Catalog;
@@ -161,6 +162,18 @@ async function boot() {
   }
   initPwa();
   onPwaChange(() => { if (route === '#/reglages') render(); });
+  // Synchronisation : on rafraîchit l'écran affiché, mais jamais en pleine leçon.
+  const inLesson = () => /^#\/(lecon|test|session|demo)\//.test(route);
+  // Rafraîchir sans remonter en haut de la page (ni voler le focus d'un champ en cours de saisie).
+  const refresh = () => {
+    if (inLesson() || document.activeElement instanceof HTMLInputElement) return;
+    const y = window.scrollY;
+    render();
+    window.scrollTo(0, y);
+  };
+  onSyncChange(refresh);
+  onRemoteData(refresh);
+  void initSync();
   window.addEventListener('hashchange', syncFromLocation);
   window.addEventListener('popstate', syncFromLocation);
   render();

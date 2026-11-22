@@ -36,11 +36,20 @@ for (const css of assets.filter((f) => f.endsWith('.css'))) {
 }
 
 const data = `<script>window.__LOGIQUE_CONTENT__ = ${safe(JSON.stringify({ index, chapters }))};</script>`;
-for (const js of assets.filter((f) => f.endsWith('.js'))) {
+// Seul le script d'entrée (référencé par index.html) est intégré. Les morceaux chargés à la demande
+// (client Supabase) ne servent pas dans le fichier unique : la synchronisation y est désactivée.
+const entries = assets.filter((f) => f.endsWith('.js') && html.includes(f));
+for (const js of entries) {
   const code = readFileSync(join(dist, 'assets', js), 'utf8');
   html = html.replace(new RegExp(`<script[^>]+src="[^"]*${js}"[^>]*></script>`), () => '');
   // Le script principal va en fin de <body> : le conteneur #app existe alors déjà.
   html = html.replace('</body>', () => `${data}\n<script type="module">${safe(code)}</script>\n</body>`);
+}
+html = html.replace(/\s*<link rel="modulepreload"[^>]*>/g, '');
+
+// Garde-fou : ce fichier est versionné, il ne doit contenir aucune configuration Supabase.
+if (/[a-z0-9]{20}\.supabase\.co|eyJhbGciOi|sb_publishable_|sb_secret_/.test(html)) {
+  throw new Error('Logique.html contiendrait une adresse ou une clé Supabase : construction annulée.');
 }
 
 if (/src="\.?\/?assets\//.test(html) || /href="\.?\/?assets\//.test(html)) {

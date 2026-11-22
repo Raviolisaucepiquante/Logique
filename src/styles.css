@@ -548,3 +548,27 @@ h3 { font-size: 1rem; font-weight: 600; }
   max-width: calc(100vw - 32px);
 }
 @media (max-width: 719px) { .toast { bottom: calc(84px + env(safe-area-inset-bottom)); } }
+
+/* Compte et synchronisation ------------------------------------------------------ */
+.sync-badge { display: inline-flex; align-items: center; color: var(--muted); }
+.sync-badge .icon { width: 1.15em; height: 1.15em; }
+.sync-badge.synced { color: var(--ok); }
+.sync-badge.error { color: var(--bad); }
+.sync-badge.syncing .icon { animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+.sync-line { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+.sync-line.ok { color: var(--ok); }
+.sync-line.bad { color: var(--bad); }
+.icon.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn-google { background: var(--surface); border: 1px solid var(--line); width: 100%; max-width: 360px; margin-top: 4px; }
+.g-logo { display: inline-flex; background: #fff; border-radius: 50%; padding: 2px; }
+.or { color: var(--muted); font-size: 0.85rem; margin: 14px 0 8px; }
+.email-form { display: flex; gap: 8px; flex-wrap: wrap; max-width: 520px; }
+.text-input { flex: 1 1 220px; min-width: 0; font: inherit; font-size: 1rem; padding: 11px 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); color: var(--text); }
+.text-input:focus { outline: none; border-color: var(--accent); }
+.auth-msg { min-height: 1.2em; margin: 8px 0 0; font-size: 0.92rem; color: var(--muted); }
+.auth-msg.ok { color: var(--ok); }
+.auth-msg.bad { color: var(--bad); }
+@media (hover: hover) { .btn-google:hover { background: var(--surface-2); } }
+@media (max-width: 560px) { .email-form .btn { width: 100%; } }

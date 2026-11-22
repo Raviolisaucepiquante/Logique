@@ -75,6 +75,8 @@ const ICONS: Record<string, string> = {
   gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
   keyboard: '<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
   download: '<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>',
+  cloud: '<path d="M7 18h10a4 4 0 0 0 .5-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/>',
+  'cloud-off': '<path d="M7 18h10a4 4 0 0 0 1.6-.3M20.4 14.6A4 4 0 0 0 17.5 10a6 6 0 0 0-8.8-4.2M6.2 8.6A6 6 0 0 0 6 11.5 3.3 3.3 0 0 0 7 18"/><path d="M3 3l18 18"/>',
 };
 
 export function icon(name: keyof typeof ICONS | string, cls = ''): SVGSVGElement {

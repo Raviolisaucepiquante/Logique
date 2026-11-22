@@ -8,12 +8,15 @@
     "build": "tsc --noEmit && vite build && node scripts/build-sw.mjs",
     "preview": "vite preview --port 4180 --strictPort",
     "test": "vitest run",
-    "standalone": "tsc --noEmit && vite build && node scripts/build-standalone.mjs",
+    "standalone": "tsc --noEmit && vite build --mode standalone && node scripts/build-standalone.mjs",
     "icons": "node scripts/make-icons.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
     "vite": "^6.4.6",
     "vitest": "^3.2.7"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.45.4"
   }
 }

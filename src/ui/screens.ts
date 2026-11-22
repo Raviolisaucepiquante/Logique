@@ -3,13 +3,14 @@ import { chapterKey, type Catalog } from '../core/content';
 import { today } from '../core/dates';
 import {
   currentStreak, dueKeys, exportProgress, importProgress, isChapterMastered, isChapterUnlocked,
-  isLessonCompleted, isLessonUnlocked, isTestUnlocked, resetProgress, save, state, unresolvedErrorKeys,
+  isLessonCompleted, isLessonUnlocked, isTestUnlocked, resetProgress, saveSettings, state, totalXpLocal, unresolvedErrorKeys,
 } from '../core/progress';
 import type { Chapter, Exercise, Module } from '../core/types';
 import { pretty } from '../logic/formula';
 import { formula, h, icon } from './dom';
 import { courseCard } from './player';
 import { installState, offlineReady, promptInstall } from './pwa';
+import { signInWithEmail, signInWithGoogle, signOut, syncNow, syncStatus, userEmail } from '../core/sync';
 
 export interface Nav {
   go: (hash: string) => void;
@@ -33,6 +34,20 @@ function navLinks(catalog: Catalog, active: Tab, nav: Nav, cls: string): HTMLEle
   }, icon(t.icon, 'nav-icon'), h('span', { class: 'nav-label' }, t.label), t.id === 'review' && due ? h('span', { class: 'badge' }, due) : null)));
 }
 
+/** Petit nuage dans l'en-tête quand on est connecté : synchronisé, en cours, hors ligne ou en erreur. */
+function syncBadge(): HTMLElement | null {
+  const s = syncStatus();
+  if (s.kind === 'unavailable' || s.kind === 'signed-out') return null;
+  const labels = {
+    syncing: 'Synchronisation…',
+    synced: 'Progression synchronisée',
+    offline: 'Hors ligne : synchronisation au retour du réseau',
+    error: 'Synchronisation impossible (voir Réglages)',
+  };
+  const label = labels[s.kind];
+  return h('span', { class: `sync-badge ${s.kind}`, title: label, 'aria-label': label }, icon(s.kind === 'offline' || s.kind === 'error' ? 'cloud-off' : 'cloud'));
+}
+
 function topBar(catalog: Catalog, active: Tab, nav: Nav): HTMLElement {
   return h('header', { class: 'topbar' },
     h('div', { class: 'topbar-inner' },
@@ -40,7 +55,8 @@ function topBar(catalog: Catalog, active: Tab, nav: Nav): HTMLElement {
       navLinks(catalog, active, nav, 'nav'),
       h('div', { class: 'meta', title: 'Série de jours · points d\'expérience' },
         h('span', { class: `streak ${currentStreak() ? 'on' : ''}` }, icon('flame'), currentStreak()),
-        h('span', { class: 'xp' }, `${state.xp} XP`),
+        h('span', { class: 'xp' }, `${totalXpLocal()} XP`),
+        syncBadge(),
       ),
     ),
   );
@@ -69,7 +85,7 @@ function summaryAside(catalog: Catalog, nav: Nav): HTMLElement {
     h('h2', null, "Aujourd'hui"),
     h('div', { class: 'aside-stats' },
       h('div', null, h('strong', null, currentStreak()), h('span', null, 'jours de série')),
-      h('div', null, h('strong', null, state.xp), h('span', null, 'XP')),
+      h('div', null, h('strong', null, totalXpLocal()), h('span', null, 'XP')),
       h('div', null, h('strong', null, due), h('span', null, 'à revoir')),
     ),
     due ? h('button', { type: 'button', class: 'btn btn-primary btn-block', onclick: () => nav.go('#/session/revision') }, 'Réviser maintenant') : null,
@@ -258,6 +274,72 @@ function toggle(label: string, desc: string, value: boolean, onChange: (v: boole
   return h('label', { class: 'setting' }, h('span', null, h('strong', null, label), h('small', null, desc)), input);
 }
 
+function syncLine(): HTMLElement {
+  const s = syncStatus();
+  const time = (iso: string) => new Date(iso).toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+  switch (s.kind) {
+    case 'syncing': return h('p', { class: 'sync-line' }, icon('refresh', 'spin'), 'Synchronisation en cours…');
+    case 'synced': return h('p', { class: 'sync-line ok' }, icon('check'), `Synchronisé (${time(s.at)})`);
+    case 'offline': return h('p', { class: 'sync-line' }, icon('cloud-off'), 'Hors ligne : ta progression est enregistrée ici et sera synchronisée au retour du réseau.');
+    case 'error': return h('p', { class: 'sync-line bad' }, icon('close'), `Synchronisation impossible : ${s.message}`);
+    default: return h('p', { class: 'sync-line' }, '');
+  }
+}
+
+/** Connexion (optionnelle) et synchronisation entre appareils. */
+function accountPanel(): HTMLElement {
+  const s = syncStatus();
+  const head = h('h2', null, 'Compte et synchronisation');
+  if (s.kind === 'unavailable') {
+    return h('section', { class: 'panel' }, head,
+      h('p', { class: 'muted' }, s.reason === 'file'
+        ? "Ce fichier est ouvert depuis le disque : pour synchroniser ta progression, utilise la version en ligne de l'application."
+        : "La synchronisation en ligne n'est pas configurée pour cette version. Tout fonctionne sans compte : ta progression reste sur cet appareil."));
+  }
+  const email = userEmail();
+  if (email) {
+    return h('section', { class: 'panel' }, head,
+      h('p', null, 'Connecté : ', h('strong', null, email)),
+      syncLine(),
+      h('p', { class: 'muted' }, 'Sur tes autres appareils, connecte-toi avec le même compte : les progressions sont fusionnées (meilleur résultat par exercice, XP additionnés, jours de série réunis).'),
+      h('div', { class: 'row' },
+        h('button', { type: 'button', class: 'btn btn-ghost btn-small', onclick: () => { void syncNow(); } }, icon('refresh'), 'Synchroniser maintenant'),
+        h('button', { type: 'button', class: 'btn btn-ghost btn-small', onclick: () => { void signOut(); } }, 'Se déconnecter'),
+      ),
+    );
+  }
+  const msg = h('p', { class: 'auth-msg', role: 'status' });
+  const input = h('input', { type: 'email', class: 'text-input', placeholder: 'ton@adresse.fr', autocomplete: 'email', 'aria-label': 'Adresse e-mail' });
+  const send = h('button', { type: 'submit', class: 'btn btn-ghost' }, 'Recevoir un lien de connexion');
+  const form = h('form', {
+    class: 'email-form',
+    onsubmit: async (e: Event) => {
+      e.preventDefault();
+      const value = input.value.trim();
+      if (!/^\S+@\S+\.\S+$/.test(value)) { msg.textContent = 'Adresse e-mail invalide.'; return; }
+      send.disabled = true;
+      msg.className = 'auth-msg';
+      msg.textContent = 'Envoi…';
+      const err = await signInWithEmail(value);
+      send.disabled = false;
+      msg.className = `auth-msg ${err ? 'bad' : 'ok'}`;
+      msg.textContent = err ?? `Lien envoyé à ${value}. Ouvre-le sur cet appareil pour te connecter (regarde aussi dans les indésirables).`;
+    },
+  }, input, send);
+  return h('section', { class: 'panel' }, head,
+    h('p', { class: 'muted' }, 'Optionnel : connecte-toi pour retrouver ta progression sur ton PC et ton téléphone. Sans compte, tout reste sur cet appareil, comme avant.'),
+    s.kind === 'error' ? syncLine() : null,
+    h('button', { type: 'button', class: 'btn btn-google', onclick: () => { void signInWithGoogle(); } }, googleLogo(), 'Continuer avec Google'),
+    h('p', { class: 'or' }, 'ou par e-mail'),
+    form,
+    msg,
+  );
+}
+
+function googleLogo(): HTMLElement {
+  return h('span', { class: 'g-logo', 'aria-hidden': 'true', html: '<svg viewBox="0 0 48 48" width="18" height="18"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.6 5.4 2.7 13.2l7.8 6.1C12.4 13.7 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.8-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.8l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.2-13.5-9.9l-7.8 6.1C6.6 42.6 14.6 48 24 48z"/></svg>' });
+}
+
 /** Installation sur l'appareil et mode hors ligne. */
 function appPanel(): HTMLElement {
   const st = installState();
@@ -287,20 +369,29 @@ export function settingsScreen(catalog: Catalog, nav: Nav, rerender: () => void)
     onchange: async () => {
       const f = file.files?.[0];
       if (!f) return;
-      try { importProgress(await f.text()); rerender(); alert('Progression importée.'); } catch (e) { alert(`Import impossible : ${(e as Error).message}`); }
+      try {
+        importProgress(await f.text());
+        rerender();
+        alert('Sauvegarde importée et fusionnée avec ta progression actuelle (meilleurs résultats conservés).');
+      } catch (e) {
+        alert(`Import impossible : ${(e as Error).message}`);
+      } finally {
+        file.value = '';
+      }
     },
   });
 
   return page(catalog, 'settings', nav,
     h('section', { class: 'panel' },
       h('h1', null, 'Réglages'),
-      toggle('Cœurs', 'Cinq cœurs par leçon ; on en perd un à chaque erreur.', state.settings.hearts, (v) => { state.settings.hearts = v; save(); }),
-      toggle('Tout débloquer', 'Accéder librement à tous les chapitres et leçons, sans condition de maîtrise.', state.settings.unlockAll, (v) => { state.settings.unlockAll = v; save(); }),
+      toggle('Cœurs', 'Cinq cœurs par leçon ; on en perd un à chaque erreur.', state.settings.hearts, (v) => { state.settings.hearts = v; saveSettings(); }),
+      toggle('Tout débloquer', 'Accéder librement à tous les chapitres et leçons, sans condition de maîtrise.', state.settings.unlockAll, (v) => { state.settings.unlockAll = v; saveSettings(); }),
     ),
+    accountPanel(),
     appPanel(),
     h('section', { class: 'panel' },
-      h('h2', null, 'Sauvegarde'),
-      h('p', { class: 'muted' }, 'La progression est enregistrée dans ce navigateur. Exporte-la pour la transférer ou la garder.'),
+      h('h2', null, 'Sauvegarde dans un fichier'),
+      h('p', { class: 'muted' }, "La progression est toujours enregistrée sur cet appareil. Exporte-la dans un fichier pour la garder en sécurité ; l'import la fusionne avec la progression actuelle, sans rien effacer."),
       h('div', { class: 'row' },
         h('button', {
           type: 'button',
@@ -311,14 +402,19 @@ export function settingsScreen(catalog: Catalog, nav: Nav, rerender: () => void)
             a.click();
             URL.revokeObjectURL(a.href);
           },
-        }, 'Exporter'),
+        }, icon('download'), 'Exporter'),
         h('button', { type: 'button', class: 'btn btn-ghost btn-small', onclick: () => file.click() }, 'Importer'),
         file,
         h('button', {
           type: 'button',
           class: 'btn btn-danger btn-small',
           onclick: () => {
-            if (confirm('Effacer toute la progression (XP, leçons, révisions, carnet) ? Cette action est définitive.')) { resetProgress(); rerender(); }
+            const k = syncStatus().kind;
+            const online = k !== 'signed-out' && k !== 'unavailable';
+            const msg = online
+              ? "Effacer la progression de cet appareil ? Tu es connecté : la sauvegarde en ligne la restaurera à la prochaine synchronisation. Pour repartir de zéro partout, déconnecte-toi d'abord."
+              : 'Effacer toute la progression (XP, leçons, révisions, carnet) ? Cette action est définitive.';
+            if (confirm(msg)) { resetProgress(); rerender(); }
           },
         }, 'Tout effacer'),
       ),
