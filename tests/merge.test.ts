@@ -85,3 +85,15 @@ describe('lecture des anciennes sauvegardes', () => {
     expect(() => normalizeProgress('texte', 'pc')).toThrow();
   });
 });
+
+import { projectOrigin } from '../src/core/sync';
+
+describe('adresse du projet Supabase', () => {
+  it('accepte les différentes formes copiées depuis le tableau de bord', () => {
+    expect(projectOrigin('https://abcdefghijklmnopqrst.supabase.co')).toBe('https://abcdefghijklmnopqrst.supabase.co');
+    expect(projectOrigin(' https://abcdefghijklmnopqrst.supabase.co/ ')).toBe('https://abcdefghijklmnopqrst.supabase.co');
+    expect(projectOrigin('https://abcdefghijklmnopqrst.supabase.co/rest/v1/')).toBe('https://abcdefghijklmnopqrst.supabase.co');
+    expect(projectOrigin('')).toBeUndefined();
+    expect(projectOrigin('pas une adresse')).toBeUndefined();
+  });
+});

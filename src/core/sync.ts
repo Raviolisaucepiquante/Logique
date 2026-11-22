@@ -12,7 +12,21 @@ import type { Session, SupabaseClient } from '@supabase/supabase-js';
 import { mergeProgress, normalizeProgress, sameProgress } from './merge';
 import { applySynced, deviceId, onSave, syncedPart } from './progress';
 
-const URL_ = (import.meta.env.VITE_SUPABASE_URL as string | undefined)?.trim();
+/**
+ * Adresse du projet, réduite à son origine : on accepte aussi qu'on ait collé l'adresse de l'API
+ * (« https://xxx.supabase.co/rest/v1/ ») ou une barre finale.
+ */
+export function projectOrigin(raw: string | undefined): string | undefined {
+  const s = raw?.trim();
+  if (!s) return undefined;
+  try {
+    return new URL(s).origin;
+  } catch {
+    return undefined;
+  }
+}
+
+const URL_ = projectOrigin(import.meta.env.VITE_SUPABASE_URL as string | undefined);
 const KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined)?.trim();
 const TABLE = 'progress';
 const LAST_SYNC_KEY = 'logiquepe:last-sync';

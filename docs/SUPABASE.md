@@ -72,7 +72,7 @@ Tant que l'écran de consentement est en mode « Testing », ajoute ton adresse 
 
 **Project Settings** (roue dentée) > **API Keys** (ou le bouton **Connect** en haut) :
 
-- *Project URL* : `https://xxxxxxxxxxxx.supabase.co` ;
+- *Project URL* : `https://xxxxxxxxxxxx.supabase.co` (si tu copies l'adresse de l'API, `…supabase.co/rest/v1/`, l'application la corrige d'elle-même) ;
 - la clé **publishable** (`sb_publishable_…`) ou, onglet « Legacy », la clé **anon** (`eyJ…`). Les deux fonctionnent.
 
 Ne copie pas la clé `service_role` / `secret`.
