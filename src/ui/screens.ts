@@ -10,7 +10,7 @@ import { pretty } from '../logic/formula';
 import { formula, h, icon } from './dom';
 import { courseCard } from './player';
 import { installState, offlineReady, promptInstall } from './pwa';
-import { signInWithEmail, signInWithGoogle, signOut, syncNow, syncStatus, userEmail } from '../core/sync';
+import { googleAvailable, signInWithEmail, signInWithGoogle, signOut, syncNow, syncStatus, userEmail } from '../core/sync';
 
 export interface Nav {
   go: (hash: string) => void;
@@ -329,8 +329,8 @@ function accountPanel(): HTMLElement {
   return h('section', { class: 'panel' }, head,
     h('p', { class: 'muted' }, 'Optionnel : connecte-toi pour retrouver ta progression sur ton PC et ton téléphone. Sans compte, tout reste sur cet appareil, comme avant.'),
     s.kind === 'error' ? syncLine() : null,
-    h('button', { type: 'button', class: 'btn btn-google', onclick: () => { void signInWithGoogle(); } }, googleLogo(), 'Continuer avec Google'),
-    h('p', { class: 'or' }, 'ou par e-mail'),
+    googleAvailable() ? h('button', { type: 'button', class: 'btn btn-google', onclick: () => { void signInWithGoogle(); } }, googleLogo(), 'Continuer avec Google') : null,
+    googleAvailable() ? h('p', { class: 'or' }, 'ou par e-mail') : h('p', { class: 'or' }, 'Connexion par e-mail : tu reçois un lien, sans mot de passe.'),
     form,
     msg,
   );

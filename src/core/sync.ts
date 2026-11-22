@@ -48,6 +48,24 @@ function setStatus(s: SyncStatus) {
 
 export const syncStatus = () => status;
 export const userEmail = () => session?.user.email ?? null;
+
+/** Connexion Google activée dans le projet Supabase ? (null tant qu'on ne sait pas, par exemple hors ligne). */
+let googleEnabled: boolean | null = null;
+export const googleAvailable = () => googleEnabled !== false;
+
+/** Lit les méthodes de connexion activées dans Supabase, pour ne proposer que celles qui marchent. */
+async function loadProviders(): Promise<void> {
+  if (!URL_ || !KEY || !navigator.onLine) return;
+  try {
+    const res = await fetch(`${URL_}/auth/v1/settings`, { headers: { apikey: KEY } });
+    if (!res.ok) return;
+    const s = (await res.json()) as { external?: Record<string, boolean> };
+    googleEnabled = !!s.external?.google;
+    statusListeners.forEach((fn) => fn());
+  } catch {
+    /* hors ligne ou serveur injoignable : on laisse le bouton */
+  }
+}
 export const lastSync = () => { try { return localStorage.getItem(LAST_SYNC_KEY); } catch { return null; } };
 
 /** Adresse de retour après la connexion : la page actuelle, sans paramètres. */
@@ -72,6 +90,7 @@ export async function initSync(): Promise<void> {
   });
 
   const urlError = new URL(location.href).searchParams.get('error_description');
+  void loadProviders();
   const { data } = await client.auth.getSession();
   session = data.session;
   cleanUrl();
