@@ -29,7 +29,9 @@ const CACHE = 'logique-${version}';
 const FILES = ${JSON.stringify(urls, null, 2)};
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(FILES)));
+  // cache: 'reload' : on va chercher chaque fichier sur le serveur, sans passer par le cache HTTP du
+  // navigateur ; sinon une ancienne page d'accueil (qui charge l'ancien code) pourrait être mise en cache.
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(FILES.map((url) => new Request(url, { cache: 'reload' })))));
 });
 
 self.addEventListener('activate', (event) => {
